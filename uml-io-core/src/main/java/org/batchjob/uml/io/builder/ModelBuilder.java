@@ -45,16 +45,7 @@ public class ModelBuilder extends AbstractPackageBuilder<Model, ModelBuilder> {
 		for (ProfileBuilder next : profileApplications) {
 			model.applyProfile(next.build());
 		}
-
 		super.doBuild(model, phase);
-
-		// try {
-		// File tempFile = File.createTempFile("tempModel", ".uml");
-		// tempFile.deleteOnExit();
-		// Uml2Utils.createResource(tempFile).getContents().add(model);
-		// } catch (IOException e) {
-		// throw new UmlIOException("error while temp file.", e);
-		// }
 		return model;
 	}
 
