@@ -1,3 +1,22 @@
+/*
+ * Copyright 2017 Michael Schieder <michael.schieder(at)gmail.com>
+ *
+ * This file is part of uml-io.
+ *
+ * uml-io is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License as published by
+ * the Free Software Foundation; either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * uml-io is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License for more details.
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * along with uml-io. If not, see <http://www.gnu.org/licenses/lgpl-3.0-standalone.html>.
+ *
+ */
 package org.batchjob.uml.io.utils;
 
 import java.io.File;
@@ -25,30 +44,28 @@ import org.eclipse.uml2.uml.UMLPackage;
 import org.eclipse.uml2.uml.resource.UMLResource;
 import org.eclipse.uml2.uml.resources.util.UMLResourcesUtil;
 
-/*
- * Copyright 2017 Michael Schieder <michael.schieder(at)gmail.com>
- *
- * This file is part of uml-io.
- *
- * uml-io is free software: you can redistribute it and/or modify
- * it under the terms of the GNU Lesser General Public License as published by
- * the Free Software Foundation; either version 3 of the License, or
- * (at your option) any later version.
- *
- * uml-io is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU Lesser General Public License for more details.
- *
- * You should have received a copy of the GNU Lesser General Public License
- * along with uml-io.  If not, see < http://www.gnu.org/licenses/lgpl-3.0-standalone.html>.
- *
- */
 public class Uml2Utils {
+	private enum Library{
+		UML_PRIMITIVE_TYPES_LIBRARY("PrimitiveTypes", UMLResource.UML_PRIMITIVE_TYPES_LIBRARY_URI),
+		JAVA_PRIMITIVE_TYPES_LIBRARY("JavaPrimitiveTypes", UMLResource.JAVA_PRIMITIVE_TYPES_LIBRARY_URI),
+		ECORE_PRIMITIVE_TYPES_LIBRARY("EcorePrimitiveTypes", UMLResource.ECORE_PRIMITIVE_TYPES_LIBRARY_URI),
+		XML_PRIMITIVE_TYPES_LIBRARY("XMLPrimitiveTypes", UMLResource.XML_PRIMITIVE_TYPES_LIBRARY_URI);	
+		private String modelName;
+		private String uri;
+		
+		private Library(String modelName, String uri){
+			this.modelName = modelName;
+			this.uri = uri;
+		}
+		public String getModelName() {
+			return modelName;
+		}
+		public String getUri() {
+			return uri;
+		}
+	}
 	private static ResourceSet set;
-	private static final String[] LIBRARY_NAMES = { "PrimitiveTypes", "EcorePrimitiveTypes", "JavaPrimitiveTypes",
-			"XMLPrimitiveTypes" };
-
+	
 	private Uml2Utils() {
 		super();
 	}
@@ -83,10 +100,9 @@ public class Uml2Utils {
 	}
 
 	private static Element findLibraryElement(String qualifiedName, Package pack) {
-		for (String libName : LIBRARY_NAMES) {
-			if (qualifiedName.startsWith(libName) && !libName.equals(pack.getName())) {
-				return findElement(qualifiedName, load(new StringBuilder(UMLResource.LIBRARIES_PATHMAP).append(libName)
-						.append(libName).append(UMLResource.LIBRARY_FILE_EXTENSION).toString()));
+		for (Library library : Library.values()) {
+			if (qualifiedName.startsWith(library.getModelName()) && !library.getModelName().equals(pack.getName())) {
+				return findElement(qualifiedName, load(library.getUri()));
 			}
 		}
 		return null;

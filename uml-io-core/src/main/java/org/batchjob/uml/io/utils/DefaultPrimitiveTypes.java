@@ -14,7 +14,7 @@
  * GNU Lesser General Public License for more details.
  *
  * You should have received a copy of the GNU Lesser General Public License
- * along with uml-io.  If not, see < http://www.gnu.org/licenses/lgpl-3.0-standalone.html>.
+ * along with uml-io.If not, see <http://www.gnu.org/licenses/lgpl-3.0-standalone.html>.
  *
  */
 package org.batchjob.uml.io.utils;
