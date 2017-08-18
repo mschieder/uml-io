@@ -170,7 +170,7 @@ public class Uml2Utils {
 		return metaclass;
 	}
 
-	public static void writeModel(Package elem, File file) {
+	public static void write(Package elem, File file) {
 		Resource resource = createResource(file);
 		try (OutputStream out = new FileOutputStream(file);) {
 			if (elem.eResource() != null) {
@@ -191,7 +191,7 @@ public class Uml2Utils {
 		return set.createResource(URI.createFileURI(file.toString()));
 	}
 
-	public static Model readFile(File file) {
+	public static Model read(File file) {
 		URI uri = URI.createFileURI(file.toString());
 
 		ResourceSet set = new ResourceSetImpl();

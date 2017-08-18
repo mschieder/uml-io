@@ -61,13 +61,13 @@ public class Uml2UtilsTest {
 
 	@Test
 	public void testReadFile() {
-		Model model = Uml2Utils.readFile(new File(this.getClass().getResource("/simple1/simple1.uml").getFile()));
+		Model model = Uml2Utils.read(new File(this.getClass().getResource("/simple1/simple1.uml").getFile()));
 		assertThat(model, notNullValue());
 	}
 
 	@Test(expected = UmlIOException.class)
 	public void testReadEmptyFile() {
-		Uml2Utils.readFile(new File(this.getClass().getResource("/empty/empty.uml").getFile()));
+		Uml2Utils.read(new File(this.getClass().getResource("/empty/empty.uml").getFile()));
 	}
 
 	@Test
@@ -76,7 +76,7 @@ public class Uml2UtilsTest {
 		try {
 			file = File.createTempFile("testWriteFile", ".uml");
 			Model model = createModel1();
-			Uml2Utils.writeModel(model, file);
+			Uml2Utils.write(model, file);
 			String content = new String(Files.readAllBytes(file.toPath()), StandardCharsets.UTF_8);
 			assertThat(countMatches("<uml:Model", content), is(1));
 			assertThat(countMatches("<packagedElement xmi:type=\"uml:Package\"", content), is(2));
@@ -94,7 +94,7 @@ public class Uml2UtilsTest {
 			file = File.createTempFile("testWriteFile", ".uml");
 			file.setReadOnly();
 			Model model = createModel1();
-			Uml2Utils.writeModel(model, file);
+			Uml2Utils.write(model, file);
 
 		} finally {
 			file.delete();
@@ -142,7 +142,7 @@ public class Uml2UtilsTest {
 	@Test
 	public void testReadClassFromOtherModel() {
 		Model model = Uml2Utils
-				.readFile(new File(this.getClass().getResource("/classfromothermodel/model_a.uml").getFile()));
+				.read(new File(this.getClass().getResource("/classfromothermodel/model_a.uml").getFile()));
 		assertThat(model, is(notNullValue()));
 		Class clazz = Uml2Utils.findElement("model_a::testa::Class1", model);
 		assertThat(clazz, is(notNullValue()));
@@ -153,7 +153,7 @@ public class Uml2UtilsTest {
 	@Test
 	public void testWriteDependentModel() throws IOException {
 		Model model = Uml2Utils
-				.readFile(new File(this.getClass().getResource("/classfromothermodel/model_a.uml").getFile()));
+				.read(new File(this.getClass().getResource("/classfromothermodel/model_a.uml").getFile()));
 		assertThat(model, is(notNullValue()));
 		Class clazzA = Uml2Utils.findElement("model_a::testa::Class1", model);
 		Class clazzB = (Class) clazzA.getOwnedAttribute("testb", null).getType();
@@ -165,7 +165,7 @@ public class Uml2UtilsTest {
 		File file = null;
 		try {
 			file = File.createTempFile("testWriteFile", ".uml");
-			Uml2Utils.writeModel(model, file);
+			Uml2Utils.write(model, file);
 			String content = new String(Files.readAllBytes(file.toPath()), StandardCharsets.UTF_8);
 			assertThat(countMatches("<uml:Model", content), is(1));
 			assertThat(countMatches(
