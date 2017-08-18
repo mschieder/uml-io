@@ -33,11 +33,13 @@ import java.nio.file.Files;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import org.batchjob.uml.io.builder.ModelBuilder;
 import org.batchjob.uml.io.exception.UmlIOException;
 import org.eclipse.emf.common.util.URI;
 import org.eclipse.uml2.uml.Class;
 import org.eclipse.uml2.uml.Model;
 import org.eclipse.uml2.uml.resource.UMLResource;
+
 import org.junit.Test;
 
 public class Uml2UtilsTest {
@@ -128,6 +130,15 @@ public class Uml2UtilsTest {
 
 	}
 
+	@Test
+	public void testLoadLibraryTypes(){
+		Model model = new ModelBuilder().setName("testlibs").build();
+		assertThat(Uml2Utils.findElement("PrimitiveTypes::String", model), is (notNullValue()));
+		assertThat(Uml2Utils.findElement("JavaPrimitiveTypes::float", model), is (notNullValue()));
+		assertThat(Uml2Utils.findElement("XMLPrimitiveTypes::String", model), is (notNullValue()));
+		assertThat(Uml2Utils.findElement("EcorePrimitiveTypes::EString", model), is (notNullValue()));
+	}
+	
 	@Test
 	public void testReadClassFromOtherModel() {
 		Model model = Uml2Utils
