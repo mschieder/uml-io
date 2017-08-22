@@ -39,3 +39,7 @@ Model model = model("testmodel").add(package_("testpackage")
 Property property = Uml2Utils.findElement("testmodel::testpackage::TestClass::testAttribute", model);
 System.out.println("attribute name: " + property.getName());
 ```
+## Notices
+Eclipse® is a registered trademark of the Eclipse Foundation, Inc.
+
+UML® is a registered trademark of The Object Management Group
