@@ -36,6 +36,7 @@ import org.eclipse.uml2.uml.Class;
 import org.eclipse.uml2.uml.Element;
 import org.eclipse.uml2.uml.Model;
 import org.eclipse.uml2.uml.NamedElement;
+import org.eclipse.uml2.uml.Namespace;
 import org.eclipse.uml2.uml.Package;
 import org.eclipse.uml2.uml.Profile;
 import org.eclipse.uml2.uml.Stereotype;
@@ -45,27 +46,32 @@ import org.eclipse.uml2.uml.resource.UMLResource;
 import org.eclipse.uml2.uml.resources.util.UMLResourcesUtil;
 
 public class Uml2Utils {
-	private enum Library{
-		UML_PRIMITIVE_TYPES_LIBRARY("PrimitiveTypes", UMLResource.UML_PRIMITIVE_TYPES_LIBRARY_URI),
-		JAVA_PRIMITIVE_TYPES_LIBRARY("JavaPrimitiveTypes", UMLResource.JAVA_PRIMITIVE_TYPES_LIBRARY_URI),
-		ECORE_PRIMITIVE_TYPES_LIBRARY("EcorePrimitiveTypes", UMLResource.ECORE_PRIMITIVE_TYPES_LIBRARY_URI),
-		XML_PRIMITIVE_TYPES_LIBRARY("XMLPrimitiveTypes", UMLResource.XML_PRIMITIVE_TYPES_LIBRARY_URI);	
+	private enum Library {
+		UML_PRIMITIVE_TYPES_LIBRARY("PrimitiveTypes",
+				UMLResource.UML_PRIMITIVE_TYPES_LIBRARY_URI), JAVA_PRIMITIVE_TYPES_LIBRARY("JavaPrimitiveTypes",
+						UMLResource.JAVA_PRIMITIVE_TYPES_LIBRARY_URI), ECORE_PRIMITIVE_TYPES_LIBRARY(
+								"EcorePrimitiveTypes",
+								UMLResource.ECORE_PRIMITIVE_TYPES_LIBRARY_URI), XML_PRIMITIVE_TYPES_LIBRARY(
+										"XMLPrimitiveTypes", UMLResource.XML_PRIMITIVE_TYPES_LIBRARY_URI);
 		private String modelName;
 		private String uri;
-		
-		private Library(String modelName, String uri){
+
+		private Library(String modelName, String uri) {
 			this.modelName = modelName;
 			this.uri = uri;
 		}
+
 		public String getModelName() {
 			return modelName;
 		}
+
 		public String getUri() {
 			return uri;
 		}
 	}
+
 	private static ResourceSet set;
-	
+
 	private Uml2Utils() {
 		super();
 	}
@@ -127,16 +133,24 @@ public class Uml2Utils {
 		if (!tokens[0].equals(pack.getName())) {
 			throw new UmlIOException("root name " + pack.getName() + " does not match with " + tokens[0]);
 		}
-		Package nextPackage = pack;
+		Namespace nextNamespace = pack;
 		if (tokens.length > 1) {
-			for (int i = 1; i < tokens.length - 1; i++) {
+			NamedElement ownedMember = null;
+			for (int i = 1; i < tokens.length; i++) {
 				String next = tokens[i];
-				nextPackage = nextPackage.getNestedPackage(next);
-				if (nextPackage == null) {
-					throw new UmlIOException("could not find package named " + tokens[i]);
+				boolean isLast = i + 1 >= tokens.length;
+				NamedElement namedElement = nextNamespace.getOwnedMember(next);
+				if (namedElement == null) {
+					throw new UmlIOException("could not find named element" + tokens[i]);
+				} else if (!isLast) {
+					if (!Namespace.class.isAssignableFrom(namedElement.getClass())) {
+						throw new UmlIOException("named element " + tokens[i] + "is no Namespace");
+					}
+					nextNamespace = (Namespace) namedElement;
 				}
+				ownedMember = namedElement;
 			}
-			result = (E) nextPackage.getOwnedMember(tokens[tokens.length - 1]);
+			result = (E) ownedMember;
 		}
 
 		if (result == null) {
