@@ -19,19 +19,27 @@
  */
 package org.batchjob.uml.io.builder;
 
-import org.eclipse.uml2.uml.Association;
-import org.eclipse.uml2.uml.Package;
-import org.eclipse.uml2.uml.UMLFactory;
+import java.util.ArrayList;
+import java.util.List;
 
-public class AssociationBuilder extends ClassifierBuilder<Association, AssociationBuilder, Package> {
+import org.eclipse.uml2.uml.Classifier;
+import org.eclipse.uml2.uml.OperationOwner;
+
+public abstract class OperationOwnerBuilder<T extends Classifier & OperationOwner, B extends ClassifierBuilder<?, ?, ?>, P>
+		extends ClassifierBuilder<T, B, P> {
+	private List<OperationBuilder> operations = new ArrayList<>();
 
 	@Override
-	protected Association create() {
-		return UMLFactory.eINSTANCE.createAssociation();
+	protected T doBuild(T product, org.batchjob.uml.io.builder.AbstractBuilder.Phase phase) {
+		super.doBuild(product, phase);
+		operations.stream().forEach(x -> x.build(product, phase));
+		return product;
 	}
 
-	@Override
-	protected void integrate(Association product, Package parent) {
-		parent.getOwnedTypes().add(product);
+	@SuppressWarnings("unchecked")
+	public B add(OperationBuilder operation) {
+		operations.add(operation);
+		return (B) this;
 	}
+
 }

@@ -23,20 +23,22 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.eclipse.uml2.uml.Classifier;
-import org.eclipse.uml2.uml.OperationOwner;
+import org.eclipse.uml2.uml.VisibilityKind;
 
-public abstract class ClassifierBuilder<T extends Classifier & OperationOwner, B extends ClassifierBuilder<?, ?, ?>, P>
+public abstract class ClassifierBuilder<T extends Classifier, B extends ClassifierBuilder<?, ?, ?>, P>
 		extends StereotypeApplicationBuilder<T, B, P> {
 	private boolean isAbstract = false;
+	private boolean isFinal = false;
+	private VisibilityKind visibility = VisibilityKind.PUBLIC_LITERAL;
 	private List<PropertyBuilder> properties = new ArrayList<>();
-	private List<OperationBuilder> operations = new ArrayList<>();
 
 	@Override
 	protected T doBuild(T product, org.batchjob.uml.io.builder.AbstractBuilder.Phase phase) {
 		product.setName(name);
 		product.setIsAbstract(isAbstract);
+		product.setIsFinalSpecialization(isFinal);
+		product.setVisibility(visibility);
 		properties.stream().forEach(x -> x.build(product, phase));
-		operations.stream().forEach(x -> x.build(product, phase));
 
 		buildStereotypeApplications(product);
 
@@ -50,15 +52,20 @@ public abstract class ClassifierBuilder<T extends Classifier & OperationOwner, B
 	}
 
 	@SuppressWarnings("unchecked")
-	public B add(PropertyBuilder property) {
-		properties.add(property);
+	public B setFinal(boolean isFinal) {
+		this.isFinal = isFinal;
 		return (B) this;
 	}
 
 	@SuppressWarnings("unchecked")
-	public B add(OperationBuilder operation) {
-		operations.add(operation);
+	public B setVisibility(VisibilityKind visibility) {
+		this.visibility = visibility;
 		return (B) this;
 	}
 
+	@SuppressWarnings("unchecked")
+	public B add(PropertyBuilder property) {
+		properties.add(property);
+		return (B) this;
+	}
 }

@@ -25,7 +25,7 @@ import org.eclipse.uml2.uml.Generalization;
 import org.eclipse.uml2.uml.Package;
 import org.eclipse.uml2.uml.UMLFactory;
 
-public class ClassBuilder extends ClassifierBuilder<Class, ClassBuilder, Package> {
+public class ClassBuilder extends OperationOwnerBuilder<Class, ClassBuilder, Package> {
 
 	private String general;
 

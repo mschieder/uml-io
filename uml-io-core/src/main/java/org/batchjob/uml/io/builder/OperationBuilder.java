@@ -46,9 +46,7 @@ public class OperationBuilder extends AbstractBuilder<Operation, OperationBuilde
 			Model model = operation.getModel();
 			operation.createReturnResult(null, Uml2Utils.findType(returnResultQualifiedName, model));
 		}
-
 		parameters.stream().forEach(x -> x.build(operation, phase));
-
 		return operation;
 	}
 

@@ -23,7 +23,7 @@ import org.eclipse.uml2.uml.Interface;
 import org.eclipse.uml2.uml.Package;
 import org.eclipse.uml2.uml.UMLFactory;
 
-public class InterfaceBuilder extends ClassifierBuilder<Interface, InterfaceBuilder, Package> {
+public class InterfaceBuilder extends OperationOwnerBuilder<Interface, InterfaceBuilder, Package> {
 	@Override
 	protected Interface create() {
 		return UMLFactory.eINSTANCE.createInterface();

@@ -2,6 +2,7 @@ package org.batchjob.uml.io.utils;
 
 import java.util.Arrays;
 
+import org.batchjob.uml.io.builder.AssociationBuilder;
 import org.batchjob.uml.io.builder.ClassBuilder;
 import org.batchjob.uml.io.builder.DataTypeBuilder;
 import org.batchjob.uml.io.builder.EnumerationBuilder;
@@ -50,6 +51,10 @@ public interface ClassModelUtils {
 
 	public static ClassBuilder class_(String name) {
 		return new ClassBuilder().setName(name);
+	}
+
+	public static AssociationBuilder association(String name) {
+		return new AssociationBuilder().setName(name);
 	}
 
 	public static InterfaceBuilder interface_(String name) {

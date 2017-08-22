@@ -21,6 +21,7 @@ package org.batchjob.uml.io.builder;
 
 import org.batchjob.uml.io.exception.UmlIOException;
 import org.batchjob.uml.io.utils.Uml2Utils;
+import org.eclipse.uml2.uml.AggregationKind;
 import org.eclipse.uml2.uml.Association;
 import org.eclipse.uml2.uml.Class;
 import org.eclipse.uml2.uml.Classifier;
@@ -31,6 +32,16 @@ import org.eclipse.uml2.uml.UMLFactory;
 import org.eclipse.uml2.uml.VisibilityKind;
 
 public class PropertyBuilder extends StereotypeApplicationBuilder<Property, PropertyBuilder, Classifier> {
+	private boolean isStatic = false;
+	private boolean isLeaf = false;
+	private boolean isOrdered = false;
+	private boolean isReadOnly = false;
+	private boolean isDerived = false;
+	private boolean isUnique = true;
+
+	// relation
+	private AggregationKind aggregation = AggregationKind.NONE_LITERAL;
+	private boolean isNavigable = true;
 	private Integer lower = 0;
 	private Integer upper = 1;
 	private String typeQualifiedName;
@@ -56,13 +67,18 @@ public class PropertyBuilder extends StereotypeApplicationBuilder<Property, Prop
 
 	@Override
 	protected Property doBuild(Property property, Phase phase) {
-
-		property.setVisibility(visibility);
-
 		property.setName(name);
+		property.setVisibility(visibility);
+		property.setIsStatic(isStatic);
+		property.setIsLeaf(isLeaf);
+		property.setIsReadOnly(isReadOnly);
+		property.setIsDerived(isDerived);
+		property.setIsUnique(isUnique);
+		property.setIsOrdered(isOrdered);
 		property.setLower(lower);
 		property.setUpper(upper);
-
+		property.setAggregation(aggregation);
+		property.setIsNavigable(isNavigable);
 		buildStereotypeApplications(property);
 
 		return property;
@@ -105,6 +121,41 @@ public class PropertyBuilder extends StereotypeApplicationBuilder<Property, Prop
 
 	public PropertyBuilder setVisibility(VisibilityKind visibility) {
 		this.visibility = visibility;
+		return this;
+	}
+
+	public PropertyBuilder setAggregation(AggregationKind aggregation) {
+		this.aggregation = aggregation;
+		return this;
+	}
+
+	public PropertyBuilder setDerived(boolean isDerived) {
+		this.isDerived = isDerived;
+		return this;
+	}
+
+	public PropertyBuilder setLeaf(boolean isLeaf) {
+		this.isLeaf = isLeaf;
+		return this;
+	}
+
+	public PropertyBuilder setNavigable(boolean isNavigable) {
+		this.isNavigable = isNavigable;
+		return this;
+	}
+
+	public PropertyBuilder setOrdered(boolean isOrdered) {
+		this.isOrdered = isOrdered;
+		return this;
+	}
+
+	public PropertyBuilder setReadOnly(boolean isReadOnly) {
+		this.isReadOnly = isReadOnly;
+		return this;
+	}
+
+	public PropertyBuilder setStatic(boolean isStatic) {
+		this.isStatic = isStatic;
 		return this;
 	}
 
