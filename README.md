@@ -7,7 +7,7 @@
 
 read example:
 ```java
-org.eclipse.uml2.uml.Model model = Uml2Utils.read(new File(filename));
+org.eclipse.uml2.uml.Model model = Uml2Utils.read(new File("/home/user/test.uml"));
 System.out.printf("model %s has %d nested packages%n", model.getName(),
 	 model.getNestedPackages().size());		
 ```
