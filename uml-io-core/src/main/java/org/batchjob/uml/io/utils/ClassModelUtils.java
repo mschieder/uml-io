@@ -15,6 +15,7 @@ import org.batchjob.uml.io.builder.ProfileBuilder;
 import org.batchjob.uml.io.builder.PropertyBuilder;
 import org.batchjob.uml.io.builder.StereotypeBuilder;
 import org.batchjob.uml.io.builder.StereotypeBuilder.BaseClass;
+import org.eclipse.uml2.uml.VisibilityKind;
 
 /*
  * Copyright 2017 Michael Schieder <michael.schieder(at)gmail.com>
@@ -83,6 +84,10 @@ public interface ClassModelUtils {
 
 	public static PropertyBuilder property(String type, String name) {
 		return new PropertyBuilder().setType(type).setName(name);
+	}
+
+	public static PropertyBuilder property(VisibilityKind visibility, String type, String name) {
+		return new PropertyBuilder().setVisibility(visibility).setType(type).setName(name);
 	}
 
 	public static StereotypeBuilder stereotype(String name) {
