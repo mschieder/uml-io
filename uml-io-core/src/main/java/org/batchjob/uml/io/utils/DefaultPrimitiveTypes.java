@@ -20,11 +20,6 @@
 package org.batchjob.uml.io.utils;
 
 public abstract class DefaultPrimitiveTypes {
-
-	private DefaultPrimitiveTypes() {
-		super();
-	}
-
 	public static final String BIGDECIMAL = "pathmap://UML_LIBRARIES/EcorePrimitiveTypes.library.uml#EBigDecimal";
 	public static final String DATE = "pathmap://UML_LIBRARIES/EcorePrimitiveTypes.library.uml#EDate";
 	public static final String DOUBLE = "pathmap://UML_LIBRARIES/EcorePrimitiveTypes.library.uml#EDouble";
@@ -32,4 +27,8 @@ public abstract class DefaultPrimitiveTypes {
 	public static final String INTEGER = "pathmap://UML_LIBRARIES/UMLPrimitiveTypes.library.uml#Integer";
 	public static final String LONG = "pathmap://UML_LIBRARIES/EcorePrimitiveTypes.library.uml#ELong";
 	public static final String STRING = "pathmap://UML_LIBRARIES/UMLPrimitiveTypes.library.uml#String";
+
+	private DefaultPrimitiveTypes() {
+		super();
+	}
 }

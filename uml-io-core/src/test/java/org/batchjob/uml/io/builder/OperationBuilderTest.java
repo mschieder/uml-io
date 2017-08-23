@@ -33,7 +33,7 @@ import org.batchjob.uml.io.utils.Uml2Utils;
 import org.eclipse.uml2.uml.Class;
 import org.eclipse.uml2.uml.Model;
 import org.eclipse.uml2.uml.Operation;
-import org.junit.Test;;
+import org.junit.Test;
 
 public class OperationBuilderTest {
 

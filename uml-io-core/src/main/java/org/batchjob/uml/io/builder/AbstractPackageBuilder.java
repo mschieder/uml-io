@@ -26,7 +26,7 @@ import java.util.Optional;
 import org.eclipse.uml2.uml.Package;
 
 public abstract class AbstractPackageBuilder<T extends Package, B extends AbstractPackageBuilder<?, ?>>
-		extends AbstractBuilder<T, B, org.eclipse.uml2.uml.Package> {
+		extends AbstractBuilder<T, B, Package> {
 	private List<ClassBuilder> classes = new ArrayList<>();
 	private List<InterfaceBuilder> interfaces = new ArrayList<>();
 	private List<EnumerationBuilder> enumerations = new ArrayList<>();

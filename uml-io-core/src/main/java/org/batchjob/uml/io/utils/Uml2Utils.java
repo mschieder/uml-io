@@ -159,11 +159,11 @@ public class Uml2Utils {
 		return result;
 	}
 
-	public static org.eclipse.uml2.uml.Package load(String uri) {
+	public static Package load(String uri) {
 		return load(URI.createURI(uri));
 	}
 
-	public static org.eclipse.uml2.uml.Package load(URI uri) {
+	public static Package load(URI uri) {
 
 		getOrCreateSet();
 		try {
@@ -174,10 +174,10 @@ public class Uml2Utils {
 		}
 	}
 
-	public static org.eclipse.uml2.uml.Class referenceMetaclass(Profile profile, String name) {
+	public static Class referenceMetaclass(Profile profile, String name) {
 		Model umlMetamodel = (Model) load(URI.createURI(UMLResource.UML_METAMODEL_URI));
 
-		org.eclipse.uml2.uml.Class metaclass = (org.eclipse.uml2.uml.Class) umlMetamodel.getOwnedType(name);
+		Class metaclass = (Class) umlMetamodel.getOwnedType(name);
 
 		profile.createMetaclassReference(metaclass);
 

@@ -30,6 +30,8 @@ import org.eclipse.uml2.uml.Stereotype;
 public abstract class StereotypeApplicationBuilder<T, B extends AbstractBuilder<?, ?, ?>, P>
 		extends AbstractBuilder<T, B, P> {
 
+	private Map<String, Map<String, Object>> stereotypeApplications = new LinkedHashMap<>();
+
 	public static class Pair {
 		private String key;
 		private Object value;
@@ -47,8 +49,6 @@ public abstract class StereotypeApplicationBuilder<T, B extends AbstractBuilder<
 			return value;
 		}
 	}
-
-	private Map<String, Map<String, Object>> stereotypeApplications = new LinkedHashMap<>();
 
 	@SuppressWarnings("unchecked")
 	public B addStereotypeApplication(String stereotypeQualifiedName, Pair... pair) {
