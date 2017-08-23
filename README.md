@@ -1,5 +1,6 @@
 # uml-io
 [![Build Status](https://travis-ci.org/mschieder/uml-io.svg?branch=master)](https://travis-ci.org/mschieder/uml-io)
+[![Coverage Status](https://coveralls.io/repos/github/mschieder/uml-io/badge.svg?branch=master)](https://coveralls.io/github/mschieder/uml-io?branch=master)
 
 ## uml-io-core
 * provides a basic set of tools to create/read/write Eclipse UML2 models in standalone applications
