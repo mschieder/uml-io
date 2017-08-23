@@ -107,12 +107,12 @@ public class Uml2Utils {
 
 	private static Element findLibraryElement(String qualifiedName, Package pack) {
 		for (Library library : Library.values()) {
-			if (qualifiedName.startsWith(library.getModelName()) && !library.getModelName().equals(pack.getName())) {
+			if (qualifiedName.startsWith(library.getModelName())
+					&& (pack == null || !library.getModelName().equals(pack.getName()))) {
 				return findElement(qualifiedName, load(library.getUri()));
 			}
 		}
 		return null;
-
 	}
 
 	@SuppressWarnings("unchecked")
