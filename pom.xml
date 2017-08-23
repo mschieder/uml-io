@@ -9,6 +9,9 @@
 		<module>uml-io-core</module>
 	</modules>
 	<properties>
+		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+		<maven.compiler.source>1.8</maven.compiler.source>
+		<maven.compiler.target>1.8</maven.compiler.target>
 		<emf.version>2.12.0</emf.version> <!-- 2.13.0 -->
 		<emf.mapping.ecore2xml.version>2.9.0</emf.mapping.ecore2xml.version> <!-- 2.9.0 -->
 	</properties>
@@ -114,19 +117,9 @@
 	<build>
 		<plugins>
 			<plugin>
-				<artifactId>maven-compiler-plugin</artifactId>
-				<version>3.3</version>
-				<configuration>
-					<encoding>UTF-8</encoding>
-					<source>1.8</source>
-					<target>1.8</target>
-				</configuration>
-			</plugin>
-			<plugin>
 				<groupId>org.jacoco</groupId>
 				<artifactId>jacoco-maven-plugin</artifactId>
 				<version>0.7.9</version>
-
 				<executions>
 					<execution>
 						<id>prepare-agent</id>
@@ -135,7 +128,6 @@
 						</goals>
 					</execution>
 				</executions>
-	
 			</plugin>
 			<plugin>
 				<groupId>org.eluder.coveralls</groupId>
