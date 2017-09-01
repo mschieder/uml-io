@@ -222,12 +222,19 @@ public class Uml2Utils {
 
 	public static Stereotype findStereotype(String qualifiedName, Model model, boolean ignoreProfileName) {
 		String searchName = qualifiedName;
-		Profile profile = model.getAppliedProfiles().get(0);
-		if (ignoreProfileName && qualifiedName.contains("::")) {
-			searchName = new StringBuilder(qualifiedName).replace(0, qualifiedName.indexOf("::"), profile.getName())
-					.toString();
+		for (Profile profile : model.getAppliedProfiles()) {
+			if (ignoreProfileName && qualifiedName.contains("::")) {
+				searchName = new StringBuilder(qualifiedName).replace(0, qualifiedName.indexOf("::"), profile.getName())
+						.toString();
+			}
+
+			Stereotype found = findStereotype(searchName, profile);
+			if (found != null) {
+				return found;
+			}
 		}
-		return findStereotype(searchName, profile);
+		return null;
+
 	}
 
 	public static Stereotype findStereotype(String qualifiedName, Package pack) {
