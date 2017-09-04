@@ -23,7 +23,12 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.HashSet;
+import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 
 import org.batchjob.uml.io.exception.UmlIOException;
 import org.eclipse.emf.common.util.URI;
@@ -32,6 +37,7 @@ import org.eclipse.emf.ecore.resource.Resource;
 import org.eclipse.emf.ecore.resource.ResourceSet;
 import org.eclipse.emf.ecore.resource.impl.ResourceSetImpl;
 import org.eclipse.emf.ecore.util.EcoreUtil;
+import org.eclipse.uml2.uml.Association;
 import org.eclipse.uml2.uml.Class;
 import org.eclipse.uml2.uml.Element;
 import org.eclipse.uml2.uml.Model;
@@ -39,6 +45,7 @@ import org.eclipse.uml2.uml.NamedElement;
 import org.eclipse.uml2.uml.Namespace;
 import org.eclipse.uml2.uml.Package;
 import org.eclipse.uml2.uml.Profile;
+import org.eclipse.uml2.uml.Property;
 import org.eclipse.uml2.uml.Stereotype;
 import org.eclipse.uml2.uml.Type;
 import org.eclipse.uml2.uml.UMLPackage;
@@ -141,7 +148,7 @@ public class Uml2Utils {
 				boolean isLast = i + 1 >= tokens.length;
 				NamedElement namedElement = nextNamespace.getOwnedMember(next);
 				if (namedElement == null) {
-					throw new UmlIOException("could not find named element" + tokens[i]);
+					throw new UmlIOException("could not find named element " + tokens[i]);
 				} else if (!isLast) {
 					if (!Namespace.class.isAssignableFrom(namedElement.getClass())) {
 						throw new UmlIOException("named element " + tokens[i] + "is no Namespace");
@@ -240,4 +247,81 @@ public class Uml2Utils {
 	public static Stereotype findStereotype(String qualifiedName, Package pack) {
 		return findElement(qualifiedName, pack);
 	}
+
+	public static List<Stereotype> findAllAppliedStereotypes(Package model) {
+		Set<Stereotype> ret = new HashSet<>();
+
+		for (Class next : getClasses(model)) {
+			ret.addAll(next.getAppliedStereotypes());
+			for (Property nextProperty : next.getOwnedAttributes()) {
+				ret.addAll(nextProperty.getAppliedStereotypes());
+			}
+		}
+		return new ArrayList<>(ret);
+	}
+
+	/**
+	 * gets all classes from a package. This method is not recursive, so classes of
+	 * nested packages are not returned
+	 * 
+	 * @param p
+	 * 
+	 * @return
+	 */
+	public static List<Class> getClasses(Package p) {
+		return filterFromPackage(p, Class.class, false);
+	}
+
+	/**
+	 * finds all associations in a package structure. This method is recursive
+	 * 
+	 * @param pack
+	 * @return
+	 */
+	public static List<Association> findAssociations(Package pack) {
+		return filterFromPackage(pack, Association.class, true);
+	}
+
+	/**
+	 * gets all assoctions from the package. This method is not recursive.
+	 * 
+	 * @param pack
+	 * @return
+	 */
+	public static List<Association> getAssociations(Package pack) {
+		return filterFromPackage(pack, Association.class, false);
+	}
+
+	/**
+	 * returns all qualified names of the collections elements
+	 * 
+	 * @param list
+	 * @return
+	 */
+	public static List<String> toQualifiedNameList(Collection<? extends NamedElement> list) {
+		List<String> result = new ArrayList<>();
+		for (NamedElement next : list) {
+			result.add(next.getQualifiedName());
+		}
+		return result;
+	}
+
+	@SuppressWarnings("unchecked")
+	protected static <R> List<R> filterFromPackage(Package pack, java.lang.Class<R> filterClass, boolean recursive) {
+		List<R> matches = new ArrayList<>();
+
+		for (Element next : pack.getOwnedElements()) {
+			if (filterClass.isAssignableFrom(next.getClass())) {
+				matches.add((R) next);
+			}
+		}
+
+		if (recursive) {
+			for (Package next : pack.getNestedPackages()) {
+				matches.addAll(filterFromPackage(next, filterClass, recursive));
+			}
+		}
+		return matches;
+	}
+
 }

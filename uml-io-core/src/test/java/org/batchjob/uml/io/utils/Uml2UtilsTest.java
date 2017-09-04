@@ -19,9 +19,13 @@
  */
 package org.batchjob.uml.io.utils;
 
+import static org.batchjob.uml.io.utils.ClassModelUtils.association;
 import static org.batchjob.uml.io.utils.ClassModelUtils.class_;
 import static org.batchjob.uml.io.utils.ClassModelUtils.model;
 import static org.batchjob.uml.io.utils.ClassModelUtils.package_;
+import static org.batchjob.uml.io.utils.Uml2Utils.toQualifiedNameList;
+import static org.hamcrest.Matchers.containsInAnyOrder;
+import static org.hamcrest.Matchers.hasSize;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.notNullValue;
 import static org.junit.Assert.assertThat;
@@ -30,6 +34,7 @@ import java.io.File;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
+import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -39,7 +44,6 @@ import org.eclipse.emf.common.util.URI;
 import org.eclipse.uml2.uml.Class;
 import org.eclipse.uml2.uml.Model;
 import org.eclipse.uml2.uml.resource.UMLResource;
-
 import org.junit.Test;
 
 public class Uml2UtilsTest {
@@ -131,14 +135,14 @@ public class Uml2UtilsTest {
 	}
 
 	@Test
-	public void testLoadLibraryTypes(){
+	public void testLoadLibraryTypes() {
 		Model model = new ModelBuilder().setName("testlibs").build();
-		assertThat(Uml2Utils.findElement("PrimitiveTypes::String", model), is (notNullValue()));
-		assertThat(Uml2Utils.findElement("JavaPrimitiveTypes::float", model), is (notNullValue()));
-		assertThat(Uml2Utils.findElement("XMLPrimitiveTypes::String", model), is (notNullValue()));
-		assertThat(Uml2Utils.findElement("EcorePrimitiveTypes::EString", model), is (notNullValue()));
+		assertThat(Uml2Utils.findElement("PrimitiveTypes::String", model), is(notNullValue()));
+		assertThat(Uml2Utils.findElement("JavaPrimitiveTypes::float", model), is(notNullValue()));
+		assertThat(Uml2Utils.findElement("XMLPrimitiveTypes::String", model), is(notNullValue()));
+		assertThat(Uml2Utils.findElement("EcorePrimitiveTypes::EString", model), is(notNullValue()));
 	}
-	
+
 	@Test
 	public void testReadClassFromOtherModel() {
 		Model model = Uml2Utils
@@ -175,5 +179,28 @@ public class Uml2UtilsTest {
 		} finally {
 			file.delete();
 		}
+	}
+
+	@Test
+	public void testFindAssociationsGetAssociations() {
+		Model model = model("tm").add(association("assoc1"))
+				.add(package_("test").add(association("assoc2")).add(package_("subpack").add(association("assoc3"))))
+				.build();
+
+		List<String> associations = toQualifiedNameList(Uml2Utils.findAssociations(model));
+		assertThat(associations, hasSize(3));
+		assertThat(associations, containsInAnyOrder("tm::assoc1", "tm::test::assoc2", "tm::test::subpack::assoc3"));
+
+		associations = toQualifiedNameList(Uml2Utils.getAssociations(model));
+		assertThat(associations, hasSize(1));
+		assertThat(associations, containsInAnyOrder("tm::assoc1"));
+		associations = toQualifiedNameList(Uml2Utils.getAssociations(model.getNestedPackage("test")));
+		assertThat(associations, hasSize(1));
+		assertThat(associations, containsInAnyOrder("tm::test::assoc2"));
+		associations = toQualifiedNameList(
+				Uml2Utils.getAssociations(model.getNestedPackage("test").getNestedPackage("subpack")));
+		assertThat(associations, hasSize(1));
+		assertThat(associations, containsInAnyOrder("tm::test::subpack::assoc3"));
+
 	}
 }
