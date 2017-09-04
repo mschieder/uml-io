@@ -19,16 +19,11 @@
  */
 package org.batchjob.uml.io.builder;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import org.eclipse.uml2.uml.Package;
 import org.eclipse.uml2.uml.Profile;
 import org.eclipse.uml2.uml.UMLFactory;
 
 public class ProfileBuilder extends AbstractPackageBuilder<Profile, ProfileBuilder> {
-
-	private List<PackageBuilder> packages = new ArrayList<>();
 
 	@Override
 	protected Profile create() {
@@ -43,11 +38,6 @@ public class ProfileBuilder extends AbstractPackageBuilder<Profile, ProfileBuild
 	@Override
 	protected Profile doBuild(Profile profile, Phase phase) {
 		super.doBuild(profile, phase);
-		profile.setName(name);
-
-		for (PackageBuilder nextPackage : packages) {
-			nextPackage.build(profile, phase);
-		}
 
 		profile.define();
 		return profile;
@@ -59,9 +49,4 @@ public class ProfileBuilder extends AbstractPackageBuilder<Profile, ProfileBuild
 		return p;
 	}
 
-	@Override
-	public ProfileBuilder add(PackageBuilder p) {
-		packages.add(p);
-		return this;
-	}
 }
