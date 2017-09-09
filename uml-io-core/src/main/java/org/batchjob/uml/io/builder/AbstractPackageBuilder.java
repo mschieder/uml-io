@@ -23,6 +23,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
+import org.batchjob.uml.io.exception.UmlIOException;
 import org.eclipse.uml2.uml.Package;
 
 public abstract class AbstractPackageBuilder<T extends Package, B extends AbstractPackageBuilder<?, ?>>
@@ -53,6 +54,24 @@ public abstract class AbstractPackageBuilder<T extends Package, B extends Abstra
 			nextAssociation.build(pack, Phase.NORMAL);
 			nextAssociation.build(pack, Phase.POST);
 		}
+	}
+
+	public B add(ClassifierBuilder p) {
+		if (ClassBuilder.class.isAssignableFrom(p.getClass())) {
+			add((ClassBuilder) p);
+		} else if (EnumerationBuilder.class.isAssignableFrom(p.getClass())) {
+			add((EnumerationBuilder) p);
+		} else if (InterfaceBuilder.class.isAssignableFrom(p.getClass())) {
+			add((InterfaceBuilder) p);
+		} else if (StereotypeBuilder.class.isAssignableFrom(p.getClass())) {
+			add((StereotypeBuilder) p);
+		}
+		// TODO erweitern
+		else {
+			throw new UmlIOException("unhandled ClassifierBuilder: " + p.getClass());
+		}
+
+		return (B) this;
 	}
 
 	@SuppressWarnings("unchecked")

@@ -25,6 +25,7 @@ import org.eclipse.uml2.uml.AggregationKind;
 import org.eclipse.uml2.uml.Association;
 import org.eclipse.uml2.uml.Class;
 import org.eclipse.uml2.uml.Classifier;
+import org.eclipse.uml2.uml.Enumeration;
 import org.eclipse.uml2.uml.Model;
 import org.eclipse.uml2.uml.Property;
 import org.eclipse.uml2.uml.Type;
@@ -57,6 +58,8 @@ public class PropertyBuilder extends StereotypeApplicationBuilder<Property, Prop
 	protected void integrate(Property product, Classifier parent) {
 		if (Class.class.isAssignableFrom(parent.getClass())) {
 			((Class) parent).getOwnedAttributes().add(product);
+		} else if (Enumeration.class.isAssignableFrom(parent.getClass())) {
+			((Enumeration) parent).getOwnedAttributes().add(product);
 		} else if (Association.class.isAssignableFrom(parent.getClass())) {
 			((Association) parent).getOwnedEnds().add(product);
 		} else {

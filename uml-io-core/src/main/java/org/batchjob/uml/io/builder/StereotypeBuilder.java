@@ -32,7 +32,7 @@ import org.eclipse.uml2.uml.Profile;
 import org.eclipse.uml2.uml.Stereotype;
 import org.eclipse.uml2.uml.UMLFactory;
 
-public class StereotypeBuilder extends AbstractBuilder<Stereotype, StereotypeBuilder, Package> {
+public class StereotypeBuilder extends ClassifierBuilder<Stereotype, StereotypeBuilder, Package> {
 	public enum BaseClass {
 		CLASS, ATTRIBUTE;
 	}
@@ -84,6 +84,7 @@ public class StereotypeBuilder extends AbstractBuilder<Stereotype, StereotypeBui
 		return this;
 	}
 
+	@Override
 	public StereotypeBuilder add(PropertyBuilder property) {
 		properties.add(property);
 		return this;

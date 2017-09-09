@@ -26,7 +26,7 @@ import org.eclipse.uml2.uml.Enumeration;
 import org.eclipse.uml2.uml.Package;
 import org.eclipse.uml2.uml.UMLFactory;
 
-public class EnumerationBuilder extends AbstractBuilder<Enumeration, EnumerationBuilder, Package> {
+public class EnumerationBuilder extends OperationOwnerBuilder<Enumeration, EnumerationBuilder, Package> {
 
 	private List<String> literals = new ArrayList<>();
 
@@ -42,8 +42,8 @@ public class EnumerationBuilder extends AbstractBuilder<Enumeration, Enumeration
 
 	@Override
 	protected Enumeration doBuild(Enumeration product, org.batchjob.uml.io.builder.AbstractBuilder.Phase phase) {
+		super.doBuild(product, phase);
 		if (phase == Phase.NORMAL) {
-			product.setName(name);
 			literals.stream().forEach(product::createOwnedLiteral);
 		}
 		return product;
