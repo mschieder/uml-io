@@ -20,18 +20,12 @@
 package org.batchjob.uml.io.builder;
 
 import org.eclipse.uml2.uml.Interface;
-import org.eclipse.uml2.uml.Package;
 import org.eclipse.uml2.uml.UMLFactory;
 
-public class InterfaceBuilder extends OperationOwnerBuilder<Interface, InterfaceBuilder, Package> {
+public class InterfaceBuilder extends OperationOwnerBuilder<Interface, InterfaceBuilder> {
 	@Override
 	protected Interface create() {
 		return UMLFactory.eINSTANCE.createInterface();
-	}
-
-	@Override
-	protected void integrate(Interface product, Package parent) {
-		parent.getOwnedTypes().add(product);
 	}
 
 }

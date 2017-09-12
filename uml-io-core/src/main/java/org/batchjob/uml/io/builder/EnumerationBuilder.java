@@ -23,21 +23,15 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.eclipse.uml2.uml.Enumeration;
-import org.eclipse.uml2.uml.Package;
 import org.eclipse.uml2.uml.UMLFactory;
 
-public class EnumerationBuilder extends OperationOwnerBuilder<Enumeration, EnumerationBuilder, Package> {
+public class EnumerationBuilder extends OperationOwnerBuilder<Enumeration, EnumerationBuilder> {
 
 	private List<String> literals = new ArrayList<>();
 
 	@Override
 	protected Enumeration create() {
 		return UMLFactory.eINSTANCE.createEnumeration();
-	}
-
-	@Override
-	protected void integrate(Enumeration product, Package parent) {
-		parent.getOwnedTypes().add(product);
 	}
 
 	@Override

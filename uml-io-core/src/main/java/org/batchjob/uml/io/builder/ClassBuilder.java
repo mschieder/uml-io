@@ -22,21 +22,15 @@ package org.batchjob.uml.io.builder;
 import org.batchjob.uml.io.utils.Uml2Utils;
 import org.eclipse.uml2.uml.Class;
 import org.eclipse.uml2.uml.Generalization;
-import org.eclipse.uml2.uml.Package;
 import org.eclipse.uml2.uml.UMLFactory;
 
-public class ClassBuilder extends OperationOwnerBuilder<Class, ClassBuilder, Package> {
+public class ClassBuilder extends OperationOwnerBuilder<Class, ClassBuilder> {
 
 	private String general;
 
 	@Override
 	protected Class create() {
 		return UMLFactory.eINSTANCE.createClass();
-	}
-
-	@Override
-	protected void integrate(Class product, Package parent) {
-		parent.getOwnedTypes().add(product);
 	}
 
 	@Override

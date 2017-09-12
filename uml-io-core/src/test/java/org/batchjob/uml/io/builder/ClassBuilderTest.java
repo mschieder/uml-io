@@ -20,7 +20,9 @@
 package org.batchjob.uml.io.builder;
 
 import static org.batchjob.uml.io.utils.ClassModelUtils.class_;
+import static org.batchjob.uml.io.utils.ClassModelUtils.enumeration;
 import static org.batchjob.uml.io.utils.ClassModelUtils.model;
+import static org.hamcrest.Matchers.hasSize;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.notNullValue;
 import static org.junit.Assert.assertThat;
@@ -55,5 +57,20 @@ public class ClassBuilderTest {
 		Class myClass = Uml2Utils.findClass("classModel::MyClass", model).get();
 		assertThat(myClass, is(notNullValue()));
 		assertThat(myClass.getVisibility(), is(VisibilityKind.PACKAGE_LITERAL));
+	}
+
+	@Test
+	public void testNestedClassifiers() {
+		Model model = model("classModel")
+				.add(class_("MyClass").add(class_("MyNestedClass")).add(enumeration("MyNestedEnum", "one", "two")))
+				.build();
+		assertThat(model, is(notNullValue()));
+		Class myClass = Uml2Utils.findClass("classModel::MyClass", model).get();
+		assertThat(myClass, is(notNullValue()));
+		assertThat(myClass.getNestedClassifiers(), hasSize(2));
+		assertThat(Uml2Utils.findElement("classModel::MyClass::MyNestedClass", model), is(notNullValue()));
+		assertThat(Uml2Utils.findElement("classModel::MyClass::MyNestedEnum", model), is(notNullValue()));
+		assertThat(Uml2Utils.findElement("classModel::MyClass::MyNestedEnum::one", model), is(notNullValue()));
+
 	}
 }

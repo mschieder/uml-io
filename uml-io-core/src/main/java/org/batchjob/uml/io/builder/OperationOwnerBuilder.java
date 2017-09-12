@@ -22,12 +22,28 @@ package org.batchjob.uml.io.builder;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.batchjob.uml.io.exception.UmlIOException;
+import org.eclipse.uml2.uml.Class;
 import org.eclipse.uml2.uml.Classifier;
+import org.eclipse.uml2.uml.Namespace;
 import org.eclipse.uml2.uml.OperationOwner;
+import org.eclipse.uml2.uml.Package;
 
-public abstract class OperationOwnerBuilder<T extends Classifier & OperationOwner, B extends ClassifierBuilder<?, ?, ?>, P>
-		extends ClassifierBuilder<T, B, P> {
+public abstract class OperationOwnerBuilder<T extends Classifier & OperationOwner, B extends ClassifierBuilder<?, ?, ?>>
+		extends ClassifierBuilder<T, B, Namespace> {
 	private List<OperationBuilder> operations = new ArrayList<>();
+
+	@Override
+	protected void integrate(T product, Namespace parent) {
+		if (Package.class.isAssignableFrom(parent.getClass())) {
+			((Package) parent).getOwnedTypes().add(product);
+		} else if (Class.class.isAssignableFrom(parent.getClass())) {
+			((Class) parent).getNestedClassifiers().add(product);
+		} else {
+			throw new UmlIOException("unsupported element: " + parent.getName());
+		}
+
+	}
 
 	@Override
 	protected T doBuild(T product, org.batchjob.uml.io.builder.AbstractBuilder.Phase phase) {

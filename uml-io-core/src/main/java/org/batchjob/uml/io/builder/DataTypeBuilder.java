@@ -20,19 +20,13 @@
 package org.batchjob.uml.io.builder;
 
 import org.eclipse.uml2.uml.DataType;
-import org.eclipse.uml2.uml.Package;
 import org.eclipse.uml2.uml.UMLFactory;
 
-public class DataTypeBuilder extends OperationOwnerBuilder<DataType, DataTypeBuilder, Package> {
+public class DataTypeBuilder extends OperationOwnerBuilder<DataType, DataTypeBuilder> {
 
 	@Override
 	protected DataType create() {
 		return UMLFactory.eINSTANCE.createDataType();
-	}
-
-	@Override
-	protected void integrate(DataType product, Package parent) {
-		parent.getOwnedTypes().add(product);
 	}
 
 }
