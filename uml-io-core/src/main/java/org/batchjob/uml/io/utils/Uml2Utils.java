@@ -148,7 +148,7 @@ public class Uml2Utils {
 				boolean isLast = i + 1 >= tokens.length;
 				NamedElement namedElement = nextNamespace.getOwnedMember(next);
 				if (namedElement == null) {
-					throw new UmlIOException("could not find named element " + tokens[i]);
+					throw new UmlIOException("could not find named element " + tokens[i] + " (" + qualifiedName + ")");
 				} else if (!isLast) {
 					if (!Namespace.class.isAssignableFrom(namedElement.getClass())) {
 						throw new UmlIOException("named element " + tokens[i] + "is no Namespace");
