@@ -42,12 +42,22 @@ public class OperationBuilder extends AbstractBuilder<Operation, OperationBuilde
 	protected Operation doBuild(Operation operation, AbstractBuilder.Phase phase) {
 		operation.setName(name);
 		operation.setIsAbstract(isAbstract);
-		if (returnResultQualifiedName != null) {
-			Model model = operation.getModel();
-			operation.createReturnResult(null, Uml2Utils.findType(returnResultQualifiedName, model));
-		}
+
 		parameters.stream().forEach(x -> x.build(operation, phase));
 		return operation;
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see org.batchjob.uml.io.builder.AbstractBuilder#postBuild(java.lang.Object)
+	 */
+	@Override
+	protected void postBuild(Operation product) {
+		if (returnResultQualifiedName != null) {
+			Model model = product.getModel();
+			product.createReturnResult(null, Uml2Utils.findType(returnResultQualifiedName, model));
+		}
 	}
 
 	@Override
