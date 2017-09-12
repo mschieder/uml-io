@@ -21,6 +21,7 @@ package org.batchjob.uml.io.utils;
 
 public abstract class DefaultPrimitiveTypes {
 	public static final String BIGDECIMAL = "pathmap://UML_LIBRARIES/EcorePrimitiveTypes.library.uml#EBigDecimal";
+	public static final String BOOLEAN = "pathmap://UML_LIBRARIES/UMLPrimitiveTypes.library.uml#Boolean";
 	public static final String DATE = "pathmap://UML_LIBRARIES/EcorePrimitiveTypes.library.uml#EDate";
 	public static final String DOUBLE = "pathmap://UML_LIBRARIES/EcorePrimitiveTypes.library.uml#EDouble";
 	public static final String FLOAT = "pathmap://UML_LIBRARIES/EcorePrimitiveTypes.library.uml#EFloat";
