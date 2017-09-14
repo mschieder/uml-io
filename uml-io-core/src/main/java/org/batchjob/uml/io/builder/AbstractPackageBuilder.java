@@ -27,7 +27,7 @@ import org.batchjob.uml.io.exception.UmlIOException;
 import org.eclipse.uml2.uml.Package;
 
 public abstract class AbstractPackageBuilder<T extends Package, B extends AbstractPackageBuilder<?, ?>>
-		extends AbstractBuilder<T, B, Package> {
+		extends AbstractBuilder<T, B, Package> implements IClassifierContainerBuilder {
 	private List<ClassBuilder> classes = new ArrayList<>();
 	private List<InterfaceBuilder> interfaces = new ArrayList<>();
 	private List<EnumerationBuilder> enumerations = new ArrayList<>();
@@ -56,6 +56,7 @@ public abstract class AbstractPackageBuilder<T extends Package, B extends Abstra
 		}
 	}
 
+	@Override
 	public B add(ClassifierBuilder p) {
 		if (ClassBuilder.class.isAssignableFrom(p.getClass())) {
 			add((ClassBuilder) p);

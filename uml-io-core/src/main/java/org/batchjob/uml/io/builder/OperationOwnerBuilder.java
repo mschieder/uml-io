@@ -25,12 +25,13 @@ import java.util.List;
 import org.batchjob.uml.io.exception.UmlIOException;
 import org.eclipse.uml2.uml.Class;
 import org.eclipse.uml2.uml.Classifier;
+import org.eclipse.uml2.uml.Interface;
 import org.eclipse.uml2.uml.Namespace;
 import org.eclipse.uml2.uml.OperationOwner;
 import org.eclipse.uml2.uml.Package;
 
 public abstract class OperationOwnerBuilder<T extends Classifier & OperationOwner, B extends ClassifierBuilder<?, ?, ?>>
-		extends ClassifierBuilder<T, B, Namespace> {
+		extends ClassifierBuilder<T, B, Namespace> implements IClassifierContainerBuilder<B> {
 	private List<OperationBuilder> operations = new ArrayList<>();
 
 	@Override
@@ -39,6 +40,9 @@ public abstract class OperationOwnerBuilder<T extends Classifier & OperationOwne
 			((Package) parent).getOwnedTypes().add(product);
 		} else if (Class.class.isAssignableFrom(parent.getClass())) {
 			((Class) parent).getNestedClassifiers().add(product);
+		} else if (Interface.class.isAssignableFrom(parent.getClass())) {
+			((Interface) parent).getNestedClassifiers().add(product);
+
 		} else {
 			throw new UmlIOException("unsupported element: " + parent.getName());
 		}
@@ -56,6 +60,18 @@ public abstract class OperationOwnerBuilder<T extends Classifier & OperationOwne
 	public B add(OperationBuilder operation) {
 		operations.add(operation);
 		return (B) this;
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * org.batchjob.uml.io.builder.ClassifierBuilder#add(org.batchjob.uml.io.builder
+	 * .ClassifierBuilder)
+	 */
+	@Override
+	public B add(ClassifierBuilder nestedClassifier) {
+		return super.add(nestedClassifier);
 	}
 
 }
