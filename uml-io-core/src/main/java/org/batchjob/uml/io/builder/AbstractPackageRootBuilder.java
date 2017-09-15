@@ -19,28 +19,36 @@
  */
 package org.batchjob.uml.io.builder;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.eclipse.uml2.uml.Package;
-import org.eclipse.uml2.uml.Profile;
-import org.eclipse.uml2.uml.UMLFactory;
 
-public class ProfileBuilder extends AbstractPackageRootBuilder<Profile, ProfileBuilder> {
+/**
+ * @author Michael Schieder
+ *
+ */
+public abstract class AbstractPackageRootBuilder<T extends Package, B extends AbstractPackageRootBuilder>
+		extends AbstractPackageBuilder<T, B> {
+	private List<ProfileBuilder> profileApplications = new ArrayList<>();
 
-	@Override
-	protected Profile create() {
-		return UMLFactory.eINSTANCE.createProfile();
+	public B add(ProfileBuilder profile) {
+		profileApplications.add(profile);
+		return (B) this;
 	}
 
 	@Override
-	protected void integrate(Profile product, Package parent) {
-		throw new UnsupportedOperationException("profile is a toplevel element");
+	protected T doBuild(T element, Phase phase) {
+		for (ProfileBuilder next : profileApplications) {
+			element.applyProfile(next.build());
+		}
+		super.doBuild(element, phase);
+		return element;
 	}
 
-	@Override
-	protected Profile doBuild(Profile profile, Phase phase) {
-		super.doBuild(profile, phase);
-
-		profile.define();
-		return profile;
+	public T build() {
+		T p = build(null, Phase.NORMAL);
+		build(null, Phase.POST);
+		return p;
 	}
-
 }

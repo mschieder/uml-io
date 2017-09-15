@@ -108,8 +108,8 @@ public class Uml2Utils {
 		return Optional.of((Class) findType(qualifiedName, model));
 	}
 
-	public static Type findType(String qualifiedName, Model model) {
-		return findElement(qualifiedName, model);
+	public static Type findType(String qualifiedName, Package pack) {
+		return findElement(qualifiedName, pack);
 	}
 
 	private static Element findLibraryElement(String qualifiedName, Package pack) {
@@ -186,7 +186,9 @@ public class Uml2Utils {
 
 		Class metaclass = (Class) umlMetamodel.getOwnedType(name);
 
-		profile.createMetaclassReference(metaclass);
+		if (profile.getMetaclassReference(metaclass) == null) {
+			profile.createMetaclassReference(metaclass);
+		}
 
 		return metaclass;
 	}
@@ -324,4 +326,24 @@ public class Uml2Utils {
 		return matches;
 	}
 
+	/**
+	 * returns the root (Model or Profile) from the element
+	 * 
+	 * @param elem
+	 * @return
+	 */
+	public static Package getRoot(Element elem) {
+		Package root = elem.getModel();
+
+		if (root == null) {
+			Element curr = elem;
+			while (curr.getOwner() != null) {
+				curr = curr.getOwner();
+			}
+			if (Profile.class.isAssignableFrom(curr.getClass())) {
+				root = (Package) curr;
+			}
+		}
+		return root;
+	}
 }

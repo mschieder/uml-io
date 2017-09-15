@@ -26,7 +26,6 @@ import org.eclipse.uml2.uml.Association;
 import org.eclipse.uml2.uml.AttributeOwner;
 import org.eclipse.uml2.uml.Class;
 import org.eclipse.uml2.uml.Classifier;
-import org.eclipse.uml2.uml.Model;
 import org.eclipse.uml2.uml.Property;
 import org.eclipse.uml2.uml.Type;
 import org.eclipse.uml2.uml.UMLFactory;
@@ -90,8 +89,7 @@ public class PropertyBuilder extends StereotypeApplicationBuilder<Property, Prop
 	@Override
 	protected void postBuild(Property property) {
 		if (typeQualifiedName != null) {
-			Model model = property.getModel();
-			Type foundType = Uml2Utils.findElement(typeQualifiedName, model);
+			Type foundType = Uml2Utils.findElement(typeQualifiedName, Uml2Utils.getRoot(property));
 
 			if (foundType == null) {
 				throw new UmlIOException("type " + typeQualifiedName + " not found");

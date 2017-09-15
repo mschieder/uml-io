@@ -23,9 +23,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.batchjob.uml.io.utils.Uml2Utils;
-import org.eclipse.uml2.uml.Model;
 import org.eclipse.uml2.uml.Operation;
 import org.eclipse.uml2.uml.OperationOwner;
+import org.eclipse.uml2.uml.Package;
 import org.eclipse.uml2.uml.UMLFactory;
 
 public class OperationBuilder extends AbstractBuilder<Operation, OperationBuilder, OperationOwner> {
@@ -55,8 +55,8 @@ public class OperationBuilder extends AbstractBuilder<Operation, OperationBuilde
 	@Override
 	protected void postBuild(Operation product) {
 		if (returnResultQualifiedName != null) {
-			Model model = product.getModel();
-			product.createReturnResult(null, Uml2Utils.findType(returnResultQualifiedName, model));
+			Package root = Uml2Utils.getRoot(product);
+			product.createReturnResult(null, Uml2Utils.findType(returnResultQualifiedName, root));
 		}
 	}
 

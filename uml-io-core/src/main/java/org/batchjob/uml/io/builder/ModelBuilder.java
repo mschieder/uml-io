@@ -19,16 +19,11 @@
  */
 package org.batchjob.uml.io.builder;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import org.eclipse.uml2.uml.Model;
 import org.eclipse.uml2.uml.Package;
 import org.eclipse.uml2.uml.UMLFactory;
 
-public class ModelBuilder extends AbstractPackageBuilder<Model, ModelBuilder> {
-
-	private List<ProfileBuilder> profileApplications = new ArrayList<>();
+public class ModelBuilder extends AbstractPackageRootBuilder<Model, ModelBuilder> {
 
 	@Override
 	protected Model create() {
@@ -42,21 +37,8 @@ public class ModelBuilder extends AbstractPackageBuilder<Model, ModelBuilder> {
 
 	@Override
 	protected Model doBuild(Model model, Phase phase) {
-		for (ProfileBuilder next : profileApplications) {
-			model.applyProfile(next.build());
-		}
 		super.doBuild(model, phase);
 		return model;
 	}
 
-	public Model build() {
-		Model m = build(null, Phase.NORMAL);
-		build(null, Phase.POST);
-		return m;
-	}
-
-	public ModelBuilder add(ProfileBuilder profile) {
-		profileApplications.add(profile);
-		return this;
-	}
 }
