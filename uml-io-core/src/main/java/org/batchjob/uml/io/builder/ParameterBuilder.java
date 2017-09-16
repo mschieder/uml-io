@@ -43,10 +43,20 @@ public class ParameterBuilder extends AbstractBuilder<Parameter, ParameterBuilde
 		if (name != null) {
 			product.setName(name);
 		}
+
+		return product;
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see org.batchjob.uml.io.builder.AbstractBuilder#postBuild(java.lang.Object)
+	 */
+	@Override
+	protected void postBuild(Parameter product) {
 		if (typeQualifiedName != null) {
 			product.setType(Uml2Utils.findType(typeQualifiedName, product.getModel()));
 		}
-		return product;
 	}
 
 	public ParameterBuilder setType(String typeQualifiedName) {

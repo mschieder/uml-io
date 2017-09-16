@@ -43,7 +43,7 @@ public class OperationBuilder extends AbstractBuilder<Operation, OperationBuilde
 		operation.setName(name);
 		operation.setIsAbstract(isAbstract);
 
-		parameters.stream().forEach(x -> x.build(operation, phase));
+		parameters.stream().forEach(x -> x.build(product, phase));
 		return operation;
 	}
 

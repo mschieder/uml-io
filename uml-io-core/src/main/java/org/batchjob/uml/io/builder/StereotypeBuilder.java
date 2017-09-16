@@ -27,12 +27,11 @@ import java.util.Set;
 import org.batchjob.uml.io.exception.UmlIOException;
 import org.batchjob.uml.io.utils.Uml2Utils;
 import org.eclipse.uml2.uml.Class;
-import org.eclipse.uml2.uml.Package;
 import org.eclipse.uml2.uml.Profile;
 import org.eclipse.uml2.uml.Stereotype;
 import org.eclipse.uml2.uml.UMLFactory;
 
-public class StereotypeBuilder extends ClassifierBuilder<Stereotype, StereotypeBuilder, Package> {
+public class StereotypeBuilder extends OperationOwnerBuilder<Stereotype, StereotypeBuilder> {
 	public enum BaseClass {
 		CLASS, ATTRIBUTE;
 	}
@@ -45,14 +44,10 @@ public class StereotypeBuilder extends ClassifierBuilder<Stereotype, StereotypeB
 		return UMLFactory.eINSTANCE.createStereotype();
 	}
 
-	@Override
-	protected void integrate(Stereotype product, Package parent) {
-		parent.getOwnedStereotypes().add(product);
-	}
 
 	@Override
 	protected Stereotype doBuild(Stereotype stereotype, Phase phase) {
-		stereotype.setName(name);
+		super.doBuild(stereotype, phase);
 
 		for (PropertyBuilder nextProperty : properties) {
 			nextProperty.build(stereotype, phase);
