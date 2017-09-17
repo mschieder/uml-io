@@ -28,7 +28,7 @@ import org.eclipse.uml2.uml.Package;
  * @author Michael Schieder
  *
  */
-public abstract class AbstractPackageRootBuilder<T extends Package, B extends AbstractPackageRootBuilder>
+public abstract class AbstractPackageRootBuilder<T extends Package, B extends AbstractPackageRootBuilder<T, B>>
 		extends AbstractPackageBuilder<T, B> {
 	private List<ProfileBuilder> profileApplications = new ArrayList<>();
 

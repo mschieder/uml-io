@@ -27,7 +27,7 @@ import org.batchjob.uml.io.exception.UmlIOException;
 import org.eclipse.uml2.uml.Package;
 
 public abstract class AbstractPackageBuilder<T extends Package, B extends AbstractPackageBuilder<?, ?>>
-		extends AbstractBuilder<T, B, Package> implements IClassifierContainerBuilder {
+		extends AbstractBuilder<T, B, Package> implements IClassifierContainerBuilder<B> {
 	private List<ClassBuilder> classes = new ArrayList<>();
 	private List<InterfaceBuilder> interfaces = new ArrayList<>();
 	private List<EnumerationBuilder> enumerations = new ArrayList<>();
@@ -66,9 +66,7 @@ public abstract class AbstractPackageBuilder<T extends Package, B extends Abstra
 			add((InterfaceBuilder) p);
 		} else if (StereotypeBuilder.class.isAssignableFrom(p.getClass())) {
 			add((StereotypeBuilder) p);
-		}
-		// TODO erweitern
-		else {
+		} else {
 			throw new UmlIOException("unhandled ClassifierBuilder: " + p.getClass());
 		}
 
