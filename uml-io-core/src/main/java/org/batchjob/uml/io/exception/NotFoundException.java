@@ -17,17 +17,28 @@
  * along with uml-io.  If not, see <http://www.gnu.org/licenses/lgpl-3.0-standalone.html>.
  *
  */
-package org.batchjob.uml.io.builder;
+package org.batchjob.uml.io.exception;
 
-import org.eclipse.uml2.uml.Class;
-import org.eclipse.uml2.uml.Namespace;
-import org.eclipse.uml2.uml.UMLFactory;
+/**
+ * @author Michael Schieder
+ *
+ */
+public class NotFoundException extends UmlIOException {
 
-public class ClassBuilder extends BehavioredClassifierBuilder<Class, ClassBuilder, Namespace> {
+	private static final long serialVersionUID = -6017677465391470552L;
+	private final String qualifiedName;
 
-	@Override
-	protected Class create() {
-		return UMLFactory.eINSTANCE.createClass();
+	public NotFoundException(String qualifiedName) {
+		super(new StringBuilder("element with qualified name \"").append(qualifiedName).append("\" not found")
+				.toString());
+		this.qualifiedName = qualifiedName;
+	}
+
+	/**
+	 * @return the qualifiedName
+	 */
+	public String getQualifiedName() {
+		return qualifiedName;
 	}
 
 }

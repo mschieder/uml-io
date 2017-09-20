@@ -30,6 +30,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 
+import org.batchjob.uml.io.exception.NotFoundException;
 import org.batchjob.uml.io.exception.UmlIOException;
 import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.common.util.WrappedException;
@@ -122,8 +123,13 @@ public class Uml2Utils {
 		return null;
 	}
 
+	public static <E extends NamedElement> E findElement(String qualifiedName, Package pack) throws NotFoundException {
+		return findElement(qualifiedName, pack, true);
+	}
+
 	@SuppressWarnings("unchecked")
-	public static <E extends NamedElement> E findElement(String qualifiedName, Package pack) {
+	public static <E extends NamedElement> E findElement(String qualifiedName, Package pack, boolean checkRootName)
+			throws NotFoundException {
 		E result = null;
 
 		if ((result = (E) findLibraryElement(qualifiedName, pack)) != null) {
@@ -137,7 +143,7 @@ public class Uml2Utils {
 
 		String[] tokens = qualifiedName.split("::");
 
-		if (!tokens[0].equals(pack.getName())) {
+		if (checkRootName && !tokens[0].equals(pack.getName())) {
 			throw new UmlIOException("root name " + pack.getName() + " does not match with " + tokens[0]);
 		}
 		Namespace nextNamespace = pack;
@@ -148,7 +154,7 @@ public class Uml2Utils {
 				boolean isLast = i + 1 >= tokens.length;
 				NamedElement namedElement = nextNamespace.getOwnedMember(next);
 				if (namedElement == null) {
-					throw new UmlIOException("could not find named element " + tokens[i] + " (" + qualifiedName + ")");
+					throw new NotFoundException(qualifiedName);
 				} else if (!isLast) {
 					if (!Namespace.class.isAssignableFrom(namedElement.getClass())) {
 						throw new UmlIOException("named element " + tokens[i] + "is no Namespace");

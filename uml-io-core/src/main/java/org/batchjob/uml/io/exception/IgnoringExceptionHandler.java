@@ -17,17 +17,34 @@
  * along with uml-io.  If not, see <http://www.gnu.org/licenses/lgpl-3.0-standalone.html>.
  *
  */
-package org.batchjob.uml.io.builder;
+package org.batchjob.uml.io.exception;
 
-import org.eclipse.uml2.uml.Class;
-import org.eclipse.uml2.uml.Namespace;
-import org.eclipse.uml2.uml.UMLFactory;
-
-public class ClassBuilder extends BehavioredClassifierBuilder<Class, ClassBuilder, Namespace> {
-
+/**
+ * @author Michael Schieder
+ *
+ */
+public class IgnoringExceptionHandler extends DefaultExceptionHandler {
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * org.batchjob.uml.io.exception.DefaultExceptionHandler#handleException(org.
+	 * batchjob.uml.io.exception.NotFoundException)
+	 */
 	@Override
-	protected Class create() {
-		return UMLFactory.eINSTANCE.createClass();
+	public void handleException(NotFoundException e) {
+		e.printStackTrace();
 	}
 
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * org.batchjob.uml.io.exception.DefaultExceptionHandler#handleException(org.
+	 * batchjob.uml.io.exception.UmlIOException)
+	 */
+	@Override
+	public void handleException(UmlIOException e) {
+		e.printStackTrace();
+	}
 }

@@ -22,6 +22,7 @@ package org.batchjob.uml.io.builder;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.batchjob.uml.io.exception.ExceptionHandler;
 import org.batchjob.uml.io.utils.Uml2Utils;
 import org.eclipse.uml2.uml.Operation;
 import org.eclipse.uml2.uml.OperationOwner;
@@ -56,7 +57,9 @@ public class OperationBuilder extends AbstractBuilder<Operation, OperationBuilde
 	protected void postBuild(Operation product) {
 		if (returnResultQualifiedName != null) {
 			Package root = Uml2Utils.getRoot(product);
-			product.createReturnResult(null, Uml2Utils.findType(returnResultQualifiedName, root));
+
+			product.createReturnResult(null,
+					ExceptionHandler.get().call(this::findElement, returnResultQualifiedName, root));
 		}
 	}
 
@@ -77,6 +80,7 @@ public class OperationBuilder extends AbstractBuilder<Operation, OperationBuilde
 
 	public OperationBuilder add(ParameterBuilder parameter) {
 		parameters.add(parameter);
+		parameter.setParent(this);
 		return this;
 	}
 }

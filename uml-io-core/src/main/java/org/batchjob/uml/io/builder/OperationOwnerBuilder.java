@@ -46,7 +46,6 @@ public abstract class OperationOwnerBuilder<T extends Classifier & OperationOwne
 		} else {
 			throw new UmlIOException("unsupported element: " + parent.getName());
 		}
-
 	}
 
 	@Override
@@ -59,19 +58,8 @@ public abstract class OperationOwnerBuilder<T extends Classifier & OperationOwne
 	@SuppressWarnings("unchecked")
 	public B add(OperationBuilder operation) {
 		operations.add(operation);
+		operation.setParent(this);
 		return (B) this;
-	}
-
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see
-	 * org.batchjob.uml.io.builder.ClassifierBuilder#add(org.batchjob.uml.io.builder
-	 * .ClassifierBuilder)
-	 */
-	@Override
-	public B add(ClassifierBuilder nestedClassifier) {
-		return super.add(nestedClassifier);
 	}
 
 }

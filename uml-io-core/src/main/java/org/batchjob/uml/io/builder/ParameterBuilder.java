@@ -19,7 +19,7 @@
  */
 package org.batchjob.uml.io.builder;
 
-import org.batchjob.uml.io.utils.Uml2Utils;
+import org.batchjob.uml.io.exception.ExceptionHandler;
 import org.eclipse.uml2.uml.Operation;
 import org.eclipse.uml2.uml.Parameter;
 import org.eclipse.uml2.uml.UMLFactory;
@@ -55,7 +55,7 @@ public class ParameterBuilder extends AbstractBuilder<Parameter, ParameterBuilde
 	@Override
 	protected void postBuild(Parameter product) {
 		if (typeQualifiedName != null) {
-			product.setType(Uml2Utils.findType(typeQualifiedName, product.getModel()));
+			product.setType(ExceptionHandler.get().call(this::findElement, typeQualifiedName, product.getModel()));
 		}
 	}
 

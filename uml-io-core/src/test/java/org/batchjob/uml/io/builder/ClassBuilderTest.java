@@ -21,6 +21,7 @@ package org.batchjob.uml.io.builder;
 
 import static org.batchjob.uml.io.utils.ClassModelUtils.class_;
 import static org.batchjob.uml.io.utils.ClassModelUtils.enumeration;
+import static org.batchjob.uml.io.utils.ClassModelUtils.interface_;
 import static org.batchjob.uml.io.utils.ClassModelUtils.model;
 import static org.hamcrest.Matchers.hasSize;
 import static org.hamcrest.Matchers.is;
@@ -29,6 +30,7 @@ import static org.junit.Assert.assertThat;
 
 import org.batchjob.uml.io.utils.Uml2Utils;
 import org.eclipse.uml2.uml.Class;
+import org.eclipse.uml2.uml.Interface;
 import org.eclipse.uml2.uml.Model;
 import org.eclipse.uml2.uml.VisibilityKind;
 import org.junit.Test;
@@ -71,6 +73,20 @@ public class ClassBuilderTest {
 		assertThat(Uml2Utils.findElement("classModel::MyClass::MyNestedClass", model), is(notNullValue()));
 		assertThat(Uml2Utils.findElement("classModel::MyClass::MyNestedEnum", model), is(notNullValue()));
 		assertThat(Uml2Utils.findElement("classModel::MyClass::MyNestedEnum::one", model), is(notNullValue()));
+	}
+
+	@Test
+	public void testInterfaceRealization() {
+		Model model = model("classModel").add(class_("Customer").addRealization("classModel::IPerson"))
+				.add(interface_("IPerson")).build();
+
+		Class clazz = Uml2Utils.findElement("classModel::Customer", model);
+		Interface ifc = Uml2Utils.findElement("classModel::IPerson", model);
+		assertThat(ifc, is(notNullValue()));
+		assertThat(clazz.getInterfaceRealizations(), hasSize(1));
+
+		assertThat(clazz.getInterfaceRealizations().get(0).getImplementingClassifier().getQualifiedName(),
+				is("classModel::Customer"));
 
 	}
 }

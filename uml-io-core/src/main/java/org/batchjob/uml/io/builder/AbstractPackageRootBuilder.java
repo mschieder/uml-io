@@ -20,9 +20,15 @@
 package org.batchjob.uml.io.builder;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
+import org.batchjob.uml.io.exception.NotFoundException;
+import org.batchjob.uml.io.utils.Uml2Utils;
+import org.eclipse.uml2.uml.Model;
+import org.eclipse.uml2.uml.NamedElement;
 import org.eclipse.uml2.uml.Package;
+import org.eclipse.uml2.uml.Profile;
 
 /**
  * @author Michael Schieder
@@ -32,8 +38,21 @@ public abstract class AbstractPackageRootBuilder<T extends Package, B extends Ab
 		extends AbstractPackageBuilder<T, B> {
 	private List<ProfileBuilder> profileApplications = new ArrayList<>();
 
+	private List<Profile> profiles = new ArrayList<>();
+	private List<Model> models = new ArrayList<>();
+
 	public B add(ProfileBuilder profile) {
 		profileApplications.add(profile);
+		return (B) this;
+	}
+
+	public B add(Profile profile) {
+		profiles.add(profile);
+		return (B) this;
+	}
+
+	public B add(Model model) {
+		models.add(model);
 		return (B) this;
 	}
 
@@ -41,6 +60,9 @@ public abstract class AbstractPackageRootBuilder<T extends Package, B extends Ab
 	protected T doBuild(T element, Phase phase) {
 		for (ProfileBuilder next : profileApplications) {
 			element.applyProfile(next.build());
+		}
+		for (Profile next : profiles) {
+			element.applyProfile(next);
 		}
 		super.doBuild(element, phase);
 		return element;
@@ -50,5 +72,41 @@ public abstract class AbstractPackageRootBuilder<T extends Package, B extends Ab
 		T p = build(null, Phase.NORMAL);
 		build(null, Phase.POST);
 		return p;
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * org.batchjob.uml.io.builder.AbstractBuilder#findElement(java.lang.String,
+	 * org.eclipse.uml2.uml.Package)
+	 */
+	@Override
+	protected <E extends NamedElement> E findElement(String qualifiedName, Package pack) {
+		E element = null;
+		NotFoundException exception = null;
+		// try to find the element within the current model/profile
+		try {
+			element = Uml2Utils.findElement(qualifiedName, pack);
+		} catch (NotFoundException e) {
+			exception = e;
+		}
+
+		// try to find the element in one of the referenced models
+		for (Iterator<Model> iterator = models.iterator(); element == null && iterator.hasNext();) {
+			Model model = iterator.next();
+			try {
+				element = Uml2Utils.findElement(qualifiedName, model, false);
+			} catch (NotFoundException e) {
+				// ignore this exception
+			}
+		}
+
+		if (element == null) {
+			// no success: rethrow the first exception
+			throw exception;
+		}
+
+		return element;
 	}
 }

@@ -76,42 +76,49 @@ public abstract class AbstractPackageBuilder<T extends Package, B extends Abstra
 	@SuppressWarnings("unchecked")
 	public B add(PackageBuilder p) {
 		packages.add(p);
+		p.setParent(this);
 		return (B) this;
 	}
 
 	@SuppressWarnings("unchecked")
 	public B add(InterfaceBuilder ifc) {
 		interfaces.add(ifc);
+		ifc.setParent(this);
 		return (B) this;
 	}
 
 	@SuppressWarnings("unchecked")
 	public B add(EnumerationBuilder enumeration) {
 		enumerations.add(enumeration);
+		enumeration.setParent(this);
 		return (B) this;
 	}
 
 	@SuppressWarnings("unchecked")
 	public B add(DataTypeBuilder dataType) {
 		dataTypes.add(dataType);
+		dataType.setParent(this);
 		return (B) this;
 	}
 
 	@SuppressWarnings("unchecked")
 	public B add(AssociationBuilder association) {
 		associations.add(association);
+		association.setParent(this);
 		return (B) this;
 	}
 
 	@SuppressWarnings("unchecked")
 	public B add(ClassBuilder clazz) {
 		classes.add(clazz);
+		clazz.setParent(this);
 		return (B) this;
 	}
 
 	@SuppressWarnings("unchecked")
-	public B add(StereotypeBuilder s) {
-		stereotypes.add(s);
+	public B add(StereotypeBuilder stereotype) {
+		stereotypes.add(stereotype);
+		stereotype.setParent(this);
 		return (B) this;
 	}
 

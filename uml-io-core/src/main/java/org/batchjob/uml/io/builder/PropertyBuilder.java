@@ -19,6 +19,7 @@
  */
 package org.batchjob.uml.io.builder;
 
+import org.batchjob.uml.io.exception.ExceptionHandler;
 import org.batchjob.uml.io.exception.UmlIOException;
 import org.batchjob.uml.io.utils.Uml2Utils;
 import org.eclipse.uml2.uml.AggregationKind;
@@ -27,7 +28,6 @@ import org.eclipse.uml2.uml.AttributeOwner;
 import org.eclipse.uml2.uml.Class;
 import org.eclipse.uml2.uml.Classifier;
 import org.eclipse.uml2.uml.Property;
-import org.eclipse.uml2.uml.Type;
 import org.eclipse.uml2.uml.UMLFactory;
 import org.eclipse.uml2.uml.VisibilityKind;
 
@@ -89,12 +89,8 @@ public class PropertyBuilder extends StereotypeApplicationBuilder<Property, Prop
 	@Override
 	protected void postBuild(Property property) {
 		if (typeQualifiedName != null) {
-			Type foundType = Uml2Utils.findElement(typeQualifiedName, Uml2Utils.getRoot(property));
-
-			if (foundType == null) {
-				throw new UmlIOException("type " + typeQualifiedName + " not found");
-			}
-			property.setType(foundType);
+			property.setType(
+					ExceptionHandler.get().call(this::findElement, typeQualifiedName, Uml2Utils.getRoot(property)));
 		} else if (typeClassBuilder != null) {
 			property.setType(typeClassBuilder.product);
 		}
