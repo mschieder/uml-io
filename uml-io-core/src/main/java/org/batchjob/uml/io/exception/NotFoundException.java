@@ -29,8 +29,12 @@ public class NotFoundException extends UmlIOException {
 	private final String qualifiedName;
 
 	public NotFoundException(String qualifiedName) {
-		super(new StringBuilder("element with qualified name \"").append(qualifiedName).append("\" not found")
-				.toString());
+		this(qualifiedName, new StringBuilder("element with qualified name \"").append(qualifiedName)
+				.append("\" not found").toString());
+	}
+
+	public NotFoundException(String qualifiedName, String message) {
+		super(message);
 		this.qualifiedName = qualifiedName;
 	}
 

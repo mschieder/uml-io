@@ -25,6 +25,7 @@ import java.util.List;
 import org.batchjob.uml.io.exception.ExceptionHandler;
 import org.batchjob.uml.io.utils.Uml2Utils;
 import org.eclipse.uml2.uml.BehavioredClassifier;
+import org.eclipse.uml2.uml.Classifier;
 import org.eclipse.uml2.uml.InterfaceRealization;
 import org.eclipse.uml2.uml.OperationOwner;
 import org.eclipse.uml2.uml.UMLFactory;
@@ -41,9 +42,14 @@ public abstract class BehavioredClassifierBuilder<T extends BehavioredClassifier
 	protected void postBuild(T product) {
 		super.postBuild(product);
 		for (String next : realizations) {
+			Classifier supplier = ExceptionHandler.get().call(this::findElement, next, Uml2Utils.getRoot(product));
+			if (supplier == null) {
+				// ignore a null-supplier. this only happens when the current ExceptionHandler
+				// ignores the NotFoundException
+				continue;
+			}
 			InterfaceRealization realization = UMLFactory.eINSTANCE.createInterfaceRealization();
-			realization.getSuppliers()
-					.add(ExceptionHandler.get().call(this::findElement, next, Uml2Utils.getRoot(product)));
+			realization.getSuppliers().add(supplier);
 			realization.getClients().add(product);
 			product.getInterfaceRealizations().add(realization);
 		}

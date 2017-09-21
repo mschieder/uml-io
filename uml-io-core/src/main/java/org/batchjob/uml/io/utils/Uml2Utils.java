@@ -144,7 +144,8 @@ public class Uml2Utils {
 		String[] tokens = qualifiedName.split("::");
 
 		if (checkRootName && !tokens[0].equals(pack.getName())) {
-			throw new UmlIOException("root name " + pack.getName() + " does not match with " + tokens[0]);
+			throw new NotFoundException(qualifiedName,
+					"root name " + pack.getName() + " does not match with " + tokens[0]);
 		}
 		Namespace nextNamespace = pack;
 		if (tokens.length > 1) {

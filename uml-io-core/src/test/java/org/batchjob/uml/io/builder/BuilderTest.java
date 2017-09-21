@@ -42,10 +42,8 @@ public class BuilderTest {
 
 	@Test
 	public void testModelWithProfile() {
-
 		ModelBuilder b = new ModelBuilder();
 		b.add(profile("myprofile").add(package_("at").add(stereotype("Size", BaseClass.ATTRIBUTE))));
-		// b.addProfileApplication(new ProfileBuilder("myProfile").add)
 		b.setName("testmodel");
 		b.add(package_("mypackage").add(
 				class_("MyClass").add(property(STRING, "myProp").addStereotypeApplication("myprofile::at::Size"))));
@@ -54,7 +52,6 @@ public class BuilderTest {
 		Model m = b.build();
 		assertThat(m, is(notNullValue()));
 		assertThat(m.getModel().getName(), is("testmodel"));
-
 	}
 
 	// ResourceSet set;

@@ -26,12 +26,14 @@ import org.eclipse.uml2.uml.NamedElement;
 import org.eclipse.uml2.uml.Package;
 
 public abstract class AbstractBuilder<T, B extends AbstractBuilder<?, ?, ?>, P> {
+	@SuppressWarnings("rawtypes")
+	private AbstractBuilder parent;
+	protected T product;
+	protected String name;
+
 	public enum Phase {
 		NORMAL, POST;
 	}
-
-	protected T product;
-	protected String name;
 
 	protected abstract T create();
 
@@ -39,13 +41,12 @@ public abstract class AbstractBuilder<T, B extends AbstractBuilder<?, ?, ?>, P> 
 
 	protected abstract T doBuild(T product, Phase phase);
 
-	private AbstractBuilder parent;
-
 	/**
 	 * @param qualifiedName
 	 * @param pack
 	 * @return
 	 */
+	@SuppressWarnings("unchecked")
 	protected <E extends NamedElement> E findElement(String qualifiedName, Package pack) {
 		return (E) getParent().map(x -> x.findElement(qualifiedName, pack))
 				.orElseThrow(() -> new UmlIOException("no parent set"));
@@ -88,6 +89,7 @@ public abstract class AbstractBuilder<T, B extends AbstractBuilder<?, ?, ?>, P> 
 	 * @param parent
 	 *            the parent to set
 	 */
+	@SuppressWarnings("rawtypes")
 	protected void setParent(AbstractBuilder parent) {
 		this.parent = parent;
 	}
@@ -95,6 +97,7 @@ public abstract class AbstractBuilder<T, B extends AbstractBuilder<?, ?, ?>, P> 
 	/**
 	 * @return the parent
 	 */
+	@SuppressWarnings("rawtypes")
 	protected Optional<AbstractBuilder> getParent() {
 		return Optional.of(parent);
 	}
