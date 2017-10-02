@@ -19,6 +19,8 @@
  */
 package org.batchjob.uml.io.exception;
 
+import org.batchjob.uml.io.exception.NotFoundException.Usage;
+
 /**
  * @author Michael Schieder
  *
@@ -29,10 +31,11 @@ public class IgnoringExceptionHandler extends DefaultExceptionHandler {
 	 * 
 	 * @see
 	 * org.batchjob.uml.io.exception.DefaultExceptionHandler#handleException(org.
-	 * batchjob.uml.io.exception.NotFoundException)
+	 * batchjob.uml.io.exception.NotFoundException,
+	 * org.batchjob.uml.io.exception.NotFoundException.Usage)
 	 */
 	@Override
-	public void handleException(NotFoundException e) {
+	public void handleException(NotFoundException e, Usage usage) {
 		e.printStackTrace();
 	}
 
@@ -41,10 +44,11 @@ public class IgnoringExceptionHandler extends DefaultExceptionHandler {
 	 * 
 	 * @see
 	 * org.batchjob.uml.io.exception.DefaultExceptionHandler#handleException(org.
-	 * batchjob.uml.io.exception.UmlIOException)
+	 * batchjob.uml.io.exception.UmlIOException,
+	 * org.batchjob.uml.io.exception.NotFoundException.Usage)
 	 */
 	@Override
-	public void handleException(UmlIOException e) {
+	public void handleException(UmlIOException e, Usage usage) {
 		e.printStackTrace();
 	}
 }

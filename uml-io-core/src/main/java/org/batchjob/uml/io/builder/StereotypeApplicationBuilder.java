@@ -22,7 +22,8 @@ package org.batchjob.uml.io.builder;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
-import org.batchjob.uml.io.exception.UmlIOException;
+import org.batchjob.uml.io.exception.NotFoundException;
+import org.batchjob.uml.io.exception.NotFoundException.Usage;
 import org.batchjob.uml.io.utils.Uml2Utils;
 import org.eclipse.uml2.uml.Element;
 import org.eclipse.uml2.uml.Stereotype;
@@ -69,7 +70,7 @@ public abstract class StereotypeApplicationBuilder<T, B extends AbstractBuilder<
 			Map<String, Object> values = next.getValue();
 			Stereotype s = Uml2Utils.findStereotype(next.getKey(), product.getModel(), true);
 			if (s == null) {
-				throw new UmlIOException("stereotype " + next.getKey() + " not found");
+				throw new NotFoundException("stereotype " + next.getKey() + " not found", Usage.STEREOTYPE);
 			}
 			if (!product.isStereotypeApplied(s)) {
 				product.applyStereotype(s);

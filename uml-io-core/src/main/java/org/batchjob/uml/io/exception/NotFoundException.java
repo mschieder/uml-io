@@ -24,18 +24,23 @@ package org.batchjob.uml.io.exception;
  *
  */
 public class NotFoundException extends UmlIOException {
+	public enum Usage {
+		CLASS, STEREOTYPE, ENUMERATION, INTERFACE, CLASSIFIER, PROPERTY_TYPE, OPERATION_PARAMTYPE, UNKNOWN;
+	}
 
 	private static final long serialVersionUID = -6017677465391470552L;
 	private final String qualifiedName;
+	private final Usage usage;
 
-	public NotFoundException(String qualifiedName) {
-		this(qualifiedName, new StringBuilder("element with qualified name \"").append(qualifiedName)
+	public NotFoundException(String qualifiedName, Usage usage) {
+		this(qualifiedName, usage, new StringBuilder("element with qualified name \"").append(qualifiedName)
 				.append("\" not found").toString());
 	}
 
-	public NotFoundException(String qualifiedName, String message) {
+	public NotFoundException(String qualifiedName, Usage usage, String message) {
 		super(message);
 		this.qualifiedName = qualifiedName;
+		this.usage = usage;
 	}
 
 	/**
@@ -45,4 +50,10 @@ public class NotFoundException extends UmlIOException {
 		return qualifiedName;
 	}
 
+	/**
+	 * @return the usage
+	 */
+	public Usage getUsage() {
+		return usage;
+	}
 }

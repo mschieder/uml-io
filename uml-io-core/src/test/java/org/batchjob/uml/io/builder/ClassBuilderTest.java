@@ -87,6 +87,8 @@ public class ClassBuilderTest {
 
 		assertThat(clazz.getInterfaceRealizations().get(0).getImplementingClassifier().getQualifiedName(),
 				is("classModel::Customer"));
+		assertThat(clazz.getInterfaceRealizations().get(0).getSuppliers().get(0).getQualifiedName(),
+				is("classModel::IPerson"));
 
 	}
 }

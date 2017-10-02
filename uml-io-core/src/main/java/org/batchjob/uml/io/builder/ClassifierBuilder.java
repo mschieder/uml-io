@@ -23,6 +23,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.batchjob.uml.io.exception.ExceptionHandler;
+import org.batchjob.uml.io.exception.NotFoundException.Usage;
 import org.batchjob.uml.io.utils.Uml2Utils;
 import org.eclipse.uml2.uml.Classifier;
 import org.eclipse.uml2.uml.Generalization;
@@ -85,8 +86,8 @@ public abstract class ClassifierBuilder<T extends Classifier, B extends Classifi
 	protected void postBuild(T product) {
 		if (general != null) {
 			Generalization generalization = UMLFactory.eINSTANCE.createGeneralization();
-			generalization
-					.setGeneral(ExceptionHandler.get().call(this::findElement, general, Uml2Utils.getRoot(product)));
+			generalization.setGeneral(ExceptionHandler.get().call(this::findElement, general,
+					Uml2Utils.getRoot(product), Usage.CLASSIFIER));
 			product.getGeneralizations().add(generalization);
 		}
 	}

@@ -66,6 +66,9 @@ public abstract class AbstractPackageBuilder<T extends Package, B extends Abstra
 			add((InterfaceBuilder) p);
 		} else if (StereotypeBuilder.class.isAssignableFrom(p.getClass())) {
 			add((StereotypeBuilder) p);
+		} else if (DataTypeBuilder.class.isAssignableFrom(p.getClass())) {
+			add((DataTypeBuilder) p);
+
 		} else {
 			throw new UmlIOException("unhandled ClassifierBuilder: " + p.getClass());
 		}

@@ -23,6 +23,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.batchjob.uml.io.exception.ExceptionHandler;
+import org.batchjob.uml.io.exception.NotFoundException.Usage;
 import org.batchjob.uml.io.utils.Uml2Utils;
 import org.eclipse.uml2.uml.Operation;
 import org.eclipse.uml2.uml.OperationOwner;
@@ -58,8 +59,8 @@ public class OperationBuilder extends AbstractBuilder<Operation, OperationBuilde
 		if (returnResultQualifiedName != null) {
 			Package root = Uml2Utils.getRoot(product);
 
-			product.createReturnResult(null,
-					ExceptionHandler.get().call(this::findElement, returnResultQualifiedName, root));
+			product.createReturnResult(null, ExceptionHandler.get().call(this::findElement, returnResultQualifiedName,
+					root, Usage.OPERATION_PARAMTYPE));
 		}
 	}
 

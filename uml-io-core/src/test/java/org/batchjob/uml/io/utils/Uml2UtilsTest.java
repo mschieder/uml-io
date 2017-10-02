@@ -201,6 +201,17 @@ public class Uml2UtilsTest {
 				Uml2Utils.getAssociations(model.getNestedPackage("test").getNestedPackage("subpack")));
 		assertThat(associations, hasSize(1));
 		assertThat(associations, containsInAnyOrder("tm::test::subpack::assoc3"));
+	}
 
+	@Test
+	public void testGetPackageName() {
+		assertThat(Uml2Utils.getPackageName("testmodel::at.test.pack::Class"), is("at.test.pack"));
+		assertThat(Uml2Utils.getPackageName("testmodel::at::test::pack::Class"), is("at.test.pack"));
+	}
+
+	@Test
+	public void testGetClassName() {
+		assertThat(Uml2Utils.getClassName("testmodel::at.test.pack::Class"), is("Class"));
+		assertThat(Uml2Utils.getClassName("testmodel::at::test::pack::Class"), is("Class"));
 	}
 }

@@ -21,6 +21,8 @@ package org.batchjob.uml.io.exception;
 
 import java.util.function.BiFunction;
 
+import org.batchjob.uml.io.exception.NotFoundException.Usage;
+
 /**
  * @author Michael Schieder
  *
@@ -40,21 +42,17 @@ public abstract class ExceptionHandler {
 		ExceptionHandler.exceptionHandler = exceptionHandler;
 	}
 
-	public void handleException(NotFoundException e) {
-		exceptionHandler.handleException(e);
-	}
+	public abstract void handleException(NotFoundException e, Usage usage);
 
-	public void handleException(UmlIOException e) {
-		exceptionHandler.handleException(e);
-	}
+	public abstract void handleException(UmlIOException e, Usage usage);
 
-	public <T, U, R> R call(BiFunction<T, U, R> f, T a, U b) {
+	public <T, U, R> R call(BiFunction<T, U, R> f, T a, U b, Usage usage) {
 		try {
 			return f.apply(a, b);
 		} catch (NotFoundException e) {
-			handleException(e);
+			handleException(e, usage);
 		} catch (UmlIOException e) {
-			handleException(e);
+			handleException(e, usage);
 		}
 		return null;
 	}

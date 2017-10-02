@@ -31,6 +31,7 @@ import java.util.Optional;
 import java.util.Set;
 
 import org.batchjob.uml.io.exception.NotFoundException;
+import org.batchjob.uml.io.exception.NotFoundException.Usage;
 import org.batchjob.uml.io.exception.UmlIOException;
 import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.common.util.WrappedException;
@@ -144,7 +145,7 @@ public class Uml2Utils {
 		String[] tokens = qualifiedName.split("::");
 
 		if (checkRootName && !tokens[0].equals(pack.getName())) {
-			throw new NotFoundException(qualifiedName,
+			throw new NotFoundException(qualifiedName, Usage.UNKNOWN,
 					"root name " + pack.getName() + " does not match with " + tokens[0]);
 		}
 		Namespace nextNamespace = pack;
@@ -155,7 +156,7 @@ public class Uml2Utils {
 				boolean isLast = i + 1 >= tokens.length;
 				NamedElement namedElement = nextNamespace.getOwnedMember(next);
 				if (namedElement == null) {
-					throw new NotFoundException(qualifiedName);
+					throw new NotFoundException(qualifiedName, Usage.UNKNOWN);
 				} else if (!isLast) {
 					if (!Namespace.class.isAssignableFrom(namedElement.getClass())) {
 						throw new UmlIOException("named element " + tokens[i] + "is no Namespace");
@@ -352,5 +353,38 @@ public class Uml2Utils {
 			}
 		}
 		return root;
+	}
+
+	public static String getPackageName(String qualifiedName) {
+		return splitToJavaNames(qualifiedName)[1];
+	}
+
+	public static String getClassName(String qualifiedName) {
+		return splitToJavaNames(qualifiedName)[2];
+	}
+
+	private static String[] splitToJavaNames(String qualifiedName) {
+		String modelname = null;
+		StringBuilder packageName = new StringBuilder();
+		StringBuilder className = new StringBuilder();
+		boolean packageNameFinished = false;
+		for (String nextToken : qualifiedName.split("::")) {
+			if (modelname == null) {
+				modelname = nextToken;
+				continue;
+			}
+			if (!packageNameFinished) {
+				if (Character.isUpperCase(nextToken.charAt(0))) {
+					packageNameFinished = true;
+				} else {
+					packageName.append(packageName.length() > 0 ? "." : "").append(nextToken);
+				}
+			}
+			if (packageNameFinished) {
+				className.append(className.length() > 0 ? "." : "").append(nextToken);
+			}
+
+		}
+		return new String[] { modelname, packageName.toString(), className.toString() };
 	}
 }

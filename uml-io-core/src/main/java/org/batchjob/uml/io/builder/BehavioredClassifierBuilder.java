@@ -23,6 +23,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.batchjob.uml.io.exception.ExceptionHandler;
+import org.batchjob.uml.io.exception.NotFoundException.Usage;
 import org.batchjob.uml.io.utils.Uml2Utils;
 import org.eclipse.uml2.uml.BehavioredClassifier;
 import org.eclipse.uml2.uml.Classifier;
@@ -42,7 +43,8 @@ public abstract class BehavioredClassifierBuilder<T extends BehavioredClassifier
 	protected void postBuild(T product) {
 		super.postBuild(product);
 		for (String next : realizations) {
-			Classifier supplier = ExceptionHandler.get().call(this::findElement, next, Uml2Utils.getRoot(product));
+			Classifier supplier = ExceptionHandler.get().call(this::findElement, next, Uml2Utils.getRoot(product),
+					Usage.INTERFACE);
 			if (supplier == null) {
 				// ignore a null-supplier. this only happens when the current ExceptionHandler
 				// ignores the NotFoundException
