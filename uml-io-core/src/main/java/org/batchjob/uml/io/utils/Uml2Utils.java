@@ -146,7 +146,7 @@ public class Uml2Utils {
 
 		if (checkRootName && !tokens[0].equals(pack.getName())) {
 			throw new NotFoundException(qualifiedName, Usage.UNKNOWN,
-					"root name " + pack.getName() + " does not match with " + tokens[0]);
+					"root name " + pack.getName() + " does not match with " + tokens[0] + "(" + qualifiedName + ")");
 		}
 		Namespace nextNamespace = pack;
 		if (tokens.length > 1) {
